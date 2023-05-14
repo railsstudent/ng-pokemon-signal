@@ -19,10 +19,10 @@ const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master
       </div>
     </div>
     <div class="container">
-      <button class="btn" (click)="calculatePokemonId(-2)">-2</button>
-      <button class="btn" (click)="calculatePokemonId(-1)">-1</button>
-      <button class="btn" (click)="calculatePokemonId(1)">+1</button>
-      <button class="btn" (click)="calculatePokemonId(2)">+2</button>
+      <button class="btn" (click)="updatePokemonId(-2)">-2</button>
+      <button class="btn" (click)="updatePokemonId(-1)">-1</button>
+      <button class="btn" (click)="updatePokemonId(1)">+1</button>
+      <button class="btn" (click)="updatePokemonId(2)">+2</button>
     </div>
   `,
   styles: [`
@@ -55,15 +55,11 @@ export class PokemonComponent {
   max = 100;
   currentPokemonId = signal(1);
 
-  calculatePokemonId(delta: number) {
-    const newId = this.currentPokemonId() + delta;
-    if (newId >= this.min && newId <= this.max) {
-      this.currentPokemonId.set(newId);
-    } else if (newId < this.min) {
-      this.currentPokemonId.set(this.min);
-    } else {
-      this.currentPokemonId.set(this.max);
-    }
+  updatePokemonId(delta: number) {
+    this.currentPokemonId.update((pokemonId) => {
+      const newId = pokemonId + delta;
+      return Math.min(Math.max(this.min, newId), this.max);
+    });
   }
 
   imageUrls = computed(() => ({
