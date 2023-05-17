@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -12,5 +12,9 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class AppComponent {
-  title = 'pokemon-signal-demo-2';
+  title = 'Pokemon Signal Demo 2';
+  constructor(titleService: Title) {
+    const title = 'Pokemon Signal Demo 2';
+    titleService.setTitle(title);
+  }
 }
