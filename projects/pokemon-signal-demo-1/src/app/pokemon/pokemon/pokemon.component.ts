@@ -51,8 +51,8 @@ const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonComponent {
-  min = 1;
-  max = 100;
+  readonly min = 1;
+  readonly max = 100;
   currentPokemonId = signal(1);
 
   updatePokemonId(delta: number) {
@@ -65,5 +65,5 @@ export class PokemonComponent {
   imageUrls = computed(() => ({
     front: `${pokemonBaseUrl}/shiny/${this.currentPokemonId()}.png`,
     back: `${pokemonBaseUrl}/back/shiny/${this.currentPokemonId()}.png`
-  }))
+  }));
 }

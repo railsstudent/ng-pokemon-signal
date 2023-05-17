@@ -1,38 +1,34 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-import { Observable, debounceTime, distinctUntilChanged, filter, map, merge, scan, startWith, shareReplay, fromEvent } from 'rxjs';
-import { POKEMON_ACTION } from '../enum/pokemon.enum';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { Subject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
+
+const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
 
 @Component({
   selector: 'app-pokemon',
   standalone: true,
-  imports: [AsyncPipe, FormsModule],
+  imports: [FormsModule],
   template: `
     <h1>
-      Display the first 100 pokemon images
+      Use Angular Signal to display the first 100 pokemon images
     </h1>
     <div>
       <label>Pokemon Id:
-        <span>{{ btnPokemonId$ | async }}</span>
+        <span>{{ currentPokemonId() }}</span>
       </label>
       <div class="container">
-        <img [src]="btnFrontImageUrl$ | async" />
-        <img [src]="btnBackImageUrl$ | async" />
+        <img [src]="imageUrls().front" />
+        <img [src]="imageUrls().back" />
       </div>
     </div>
     <div class="container">
-      <button class="btn" #btnMinusTwo>-2</button>
-      <button class="btn" #btnMinusOne>-1</button>
-      <button class="btn" #btnAddOne>+1</button>
-      <button class="btn" #btnAddTwo>+2</button>
-      <form #f="ngForm" novalidate>
-        <input type="number" [(ngModel)]="searchId" [ngModelOptions]="{ updateOn: 'blur' }"
-          name="searchId" id="searchId" />
-      </form>
-      <pre>
-        searchId: {{ searchId }}
-      </pre>
+      <button class="btn" #btnMinusTwo (click)="updatePokemonId(-2)">-2</button>
+      <button class="btn" #btnMinusOne (click)="updatePokemonId(-1)">-1</button>
+      <button class="btn" #btnAddOne (click)="updatePokemonId(1)">+1</button>
+      <button class="btn" #btnAddTwo (click)="updatePokemonId(2)">+2</button>
+      <input type="number" [ngModel]="searchId" (ngModelChange)="searchIdSub.next($event)"
+        name="searchId" id="searchId" />
     </div>
   `,
   styles: [`
@@ -64,80 +60,33 @@ import { POKEMON_ACTION } from '../enum/pokemon.enum';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonComponent implements OnInit {
-  @ViewChild('btnMinusTwo', { static: true, read: ElementRef })
-  btnMinusTwo!: ElementRef<HTMLButtonElement>;
-
-  @ViewChild('btnMinusOne', { static: true, read: ElementRef })
-  btnMinusOne!: ElementRef<HTMLButtonElement>;
-
-  @ViewChild('btnAddOne', { static: true, read: ElementRef })
-  btnAddOne!: ElementRef<HTMLButtonElement>;
-
-  @ViewChild('btnAddTwo', { static: true, read: ElementRef })
-  btnAddTwo!: ElementRef<HTMLButtonElement>;
-
-  @ViewChild('f', { static: true, read: NgForm })
-  myForm!: NgForm;
-
-  btnPokemonId$!: Observable<number>;
-  btnFrontImageUrl$!: Observable<string>;
-  btnBackImageUrl$!: Observable<string>;
-
+export class PokemonComponent {
   searchId = 1;
+  searchIdSub = new Subject<number>();
 
-  ngOnInit() {
-    const btnMinusTwo$ = this.createButtonClickObservable(this.btnMinusTwo, -2);
-    const btnMinusOne$ = this.createButtonClickObservable(this.btnMinusOne, -1);
-    const btnAddOne$ = this.createButtonClickObservable(this.btnAddOne, 1);
-    const btnAddTwo$ = this.createButtonClickObservable(this.btnAddTwo, 2);
+  readonly min = 1;
+  readonly max = 100;
+  currentPokemonId = signal(1);
 
-    const inputId$ = this.myForm.form.valueChanges
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged((prev, curr) => prev.searchId === curr.searchId),
-        filter((form) => form.searchId >= 1 && form.searchId <= 100),
-        map((form) => form.searchId),
-        map((value) => ({
-          value,
-          action: POKEMON_ACTION.OVERWRITE,
-        }))
-      );
-
-    this.btnPokemonId$ = merge(btnMinusTwo$, btnMinusOne$, btnAddOne$, btnAddTwo$, inputId$)
-      .pipe(
-        scan((acc, { value, action }) => {
-          if (action === POKEMON_ACTION.OVERWRITE) {
-            return value;
-          } else if (action === POKEMON_ACTION.ADD) {
-            const potentialValue = acc + value;
-            if (potentialValue >= 1 && potentialValue <= 100) {
-              return potentialValue;
-            } else if (potentialValue < 1) {
-              return 1;
-            }
-
-            return 100;
-          }
-
-          return acc;
-        }, 1),
-        startWith(1),
-        shareReplay(1),
-      );
-
-      this.btnFrontImageUrl$ = this.btnPokemonId$.pipe(
-        map((pokemonId: number) =>    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${pokemonId}.png`)
-        );
-
-      this.btnBackImageUrl$ = this.btnPokemonId$.pipe(
-        map((pokemonId: number) =>    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/${pokemonId}.png`)
-        );
+  updatePokemonId(delta: number) {
+    this.currentPokemonId.update((pokemonId) => {
+      const newId = pokemonId + delta;
+      return Math.min(Math.max(this.min, newId), this.max);
+    });
   }
 
-  createButtonClickObservable(ref: ElementRef<HTMLButtonElement>, value: number) {
-    return fromEvent(ref.nativeElement, 'click').pipe(
-      map(() => ({ value, action: POKEMON_ACTION.ADD }))
-    );
+  imageUrls = computed(() => ({
+    front: `${pokemonBaseUrl}/shiny/${this.currentPokemonId()}.png`,
+    back: `${pokemonBaseUrl}/back/shiny/${this.currentPokemonId()}.png`
+  }));
+
+  constructor() {
+    this.searchIdSub
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        filter((value) => value >= this.min && value <= this.max),
+        takeUntilDestroyed(),
+      ).subscribe((value) => this.currentPokemonId.set(value));
   }
 }
