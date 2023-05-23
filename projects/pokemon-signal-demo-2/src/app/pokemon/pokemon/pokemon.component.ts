@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, filter, BehaviorSubject } from 'rxjs';
 
 const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
 
@@ -27,7 +27,7 @@ const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master
       <button class="btn" #btnMinusOne (click)="updatePokemonId(-1)">-1</button>
       <button class="btn" #btnAddOne (click)="updatePokemonId(1)">+1</button>
       <button class="btn" #btnAddTwo (click)="updatePokemonId(2)">+2</button>
-      <input type="number" [ngModel]="searchId" (ngModelChange)="searchIdSub.next($event)"
+      <input type="number" [ngModel]="searchIdSub.getValue()" (ngModelChange)="searchIdSub.next($event)"
         name="searchId" id="searchId" />
     </div>
   `,
@@ -61,8 +61,7 @@ const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonComponent {
-  searchId = 1;
-  searchIdSub = new Subject<number>();
+  searchIdSub = new BehaviorSubject(1);
 
   readonly min = 1;
   readonly max = 100;
