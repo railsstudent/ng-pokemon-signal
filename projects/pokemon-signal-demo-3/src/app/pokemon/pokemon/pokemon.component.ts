@@ -1,8 +1,8 @@
-import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { NgFor, NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { BehaviorSubject, Subject, debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
 import { retrievePokemonFn } from './retrieve-pokemon';
 
 const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
@@ -10,7 +10,7 @@ const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master
 @Component({
   selector: 'app-pokemon',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, NgIf, NgTemplateOutlet, NgFor],
+  imports: [FormsModule, NgTemplateOutlet, NgFor],
   template: `
     <h2>
       Use Angular signal to display the first 100 pokemon images

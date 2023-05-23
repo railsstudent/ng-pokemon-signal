@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged, filter, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 
 const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
 
