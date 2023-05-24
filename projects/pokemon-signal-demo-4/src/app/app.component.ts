@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-import { PokemonComponent } from './pokemon/pokemon.component';
+import { PokemonComponent } from './pokemon/pokemon/pokemon.component';
 
 @Component({
   selector: 'app-root',
