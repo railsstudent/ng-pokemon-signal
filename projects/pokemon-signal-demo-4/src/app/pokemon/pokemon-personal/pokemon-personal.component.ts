@@ -33,6 +33,6 @@ import { FlattenPokemon } from '../interfaces/pokemon.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonPersonalComponent {
-  @Input()
+  @Input({ required: true })
   pokemon!: FlattenPokemon;
 }

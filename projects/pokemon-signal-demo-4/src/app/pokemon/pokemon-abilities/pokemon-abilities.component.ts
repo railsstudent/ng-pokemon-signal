@@ -41,6 +41,6 @@ import { FlattenPokemon } from '../interfaces/pokemon.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonAbilitiesComponent {
-  @Input()
+  @Input({ required: true })
   pokemon!: FlattenPokemon;
 }
