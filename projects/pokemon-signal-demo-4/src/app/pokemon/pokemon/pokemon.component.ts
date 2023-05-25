@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PokemonAbilitiesComponent } from '../pokemon-abilities/pokemon-abilities.component';
 import { PokemonControlsComponent } from '../pokemon-controls/pokemon-control.component';
@@ -15,14 +15,14 @@ import { PokemonService } from '../services/pokemon.service';
       Display the first 100 pokemon images
     </h1>
     <div>
-      <ng-container *ngIf="pokemon() as pokemon">
+      <ng-container>
         <div class="container">
-          <img [src]="pokemon.front_shiny" />
-          <img [src]="pokemon.back_shiny" />
+          <img [src]="pokemon().front_shiny" />
+          <img [src]="pokemon().back_shiny" />
         </div>
-        <app-pokemon-personal [pokemon]="pokemon"></app-pokemon-personal>
-        <app-pokemon-stats [pokemon]="pokemon"></app-pokemon-stats>
-        <app-pokemon-abilities [pokemon]="pokemon"></app-pokemon-abilities>
+        <app-pokemon-personal [pokemon]="pokemon()"></app-pokemon-personal>
+        <app-pokemon-stats [pokemon]="pokemon()"></app-pokemon-stats>
+        <app-pokemon-abilities [pokemon]="pokemon()"></app-pokemon-abilities>
       </ng-container>
     </div>
     <app-pokemon-controls></app-pokemon-controls>

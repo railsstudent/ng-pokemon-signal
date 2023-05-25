@@ -37,7 +37,17 @@ export class PokemonService {
       }
     )
   );
-  pokemon = toSignal(this.pokemon$)
+  pokemon = toSignal(this.pokemon$, { initialValue: {
+      id: -1,
+      name: '',
+      height: -1,
+      weight: -1,
+      back_shiny: '',
+      front_shiny: '',
+      abilities: [],
+      stats: [],
+    } as FlattenPokemon
+  })
 
   updatePokemonId(pokemonId: number) {
     this.pokemonIdSub.next(pokemonId); 
