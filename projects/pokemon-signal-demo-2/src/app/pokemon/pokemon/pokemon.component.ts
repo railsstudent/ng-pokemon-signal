@@ -23,10 +23,10 @@ const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master
       </div>
     </div>
     <div class="container">
-      <button class="btn" #btnMinusTwo (click)="updatePokemonId(-2)">-2</button>
-      <button class="btn" #btnMinusOne (click)="updatePokemonId(-1)">-1</button>
-      <button class="btn" #btnAddOne (click)="updatePokemonId(1)">+1</button>
-      <button class="btn" #btnAddTwo (click)="updatePokemonId(2)">+2</button>
+      <button class="btn" (click)="updatePokemonId(-2)">-2</button>
+      <button class="btn" (click)="updatePokemonId(-1)">-1</button>
+      <button class="btn" (click)="updatePokemonId(1)">+1</button>
+      <button class="btn" (click)="updatePokemonId(2)">+2</button>
       <input type="number" [ngModel]="searchIdSub.getValue()" (ngModelChange)="searchIdSub.next($event)"
         name="searchId" id="searchId" />
     </div>
