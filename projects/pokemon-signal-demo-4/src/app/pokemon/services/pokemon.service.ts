@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Observable, Subject, map, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map, switchMap } from 'rxjs';
 import { FlattenPokemon, Pokemon } from '../interfaces/pokemon.interface';
 
 const EMPTY_POKEMON: FlattenPokemon = {
@@ -48,7 +48,7 @@ const pokemonTransformer = (pokemon: Pokemon) => {
   providedIn: 'root'
 })
 export class PokemonService {
-  private readonly pokemonIdSub = new Subject<number>();
+  private readonly pokemonIdSub = new BehaviorSubject(1);
   private retrievePokemon = retrievePokemonFn();
   private readonly pokemon$: Observable<FlattenPokemon> =  this.pokemonIdSub
     .pipe(
@@ -59,5 +59,11 @@ export class PokemonService {
 
   updatePokemonId(pokemonId: number) {
     this.pokemonIdSub.next(pokemonId); 
+  }
+
+  updatePokemonIdByDelta(input: { delta: number; min: number; max: number }) {
+    const potentialId = this.pokemonIdSub.getValue() + input.delta;
+    const newId = Math.min(input.max, Math.max(input.min, potentialId));
+    this.pokemonIdSub.next(newId); 
   }
 }

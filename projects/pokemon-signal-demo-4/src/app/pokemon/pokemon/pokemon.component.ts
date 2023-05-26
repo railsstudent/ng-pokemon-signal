@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PokemonAbilitiesComponent } from '../pokemon-abilities/pokemon-abilities.component';
 import { PokemonControlsComponent } from '../pokemon-controls/pokemon-control.component';
@@ -9,7 +8,7 @@ import { PokemonService } from '../services/pokemon.service';
 @Component({
   selector: 'app-pokemon',
   standalone: true,
-  imports: [NgIf, PokemonControlsComponent, PokemonAbilitiesComponent, PokemonStatsComponent, PokemonPersonalComponent],
+  imports: [PokemonControlsComponent, PokemonAbilitiesComponent, PokemonStatsComponent, PokemonPersonalComponent],
   template: `
     <h1>
       Display the first 100 pokemon images

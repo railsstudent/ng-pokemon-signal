@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, filter, fromEvent, map, merge, scan, shareReplay, startWith, Subscription } from 'rxjs';
-import { POKEMON_ACTION } from '../enum/pokemon.enum';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { PokemonService } from '../services/pokemon.service';
 
 @Component({
@@ -10,16 +10,14 @@ import { PokemonService } from '../services/pokemon.service';
   imports: [FormsModule],
   template: `
     <div class="container">
-      <button class="btn" #btnMinusTwo>-2</button>
-      <button class="btn" #btnMinusOne>-1</button>
-      <button class="btn" #btnAddOne>+1</button>
-      <button class="btn" #btnAddTwo>+2</button>
-      <form #f="ngForm" novalidate>
-        <input type="number" [(ngModel)]="searchId" [ngModelOptions]="{ updateOn: 'blur' }"
-          name="searchId" id="searchId" />
-      </form>
+      <button class="btn" (click)="updatePokemonId(-2)">-2</button>
+      <button class="btn" (click)="updatePokemonId(-1)">-1</button>
+      <button class="btn" (click)="updatePokemonId(1)">+1</button>
+      <button class="btn" (click)="updatePokemonId(2)">+2</button>
+      <input type="number" [ngModel]="searchIdSub.getValue()" (ngModelChange)="searchIdSub.next($event)"
+        name="searchId" id="searchId" />
       <pre>
-        searchId: {{ searchId }}
+        searchId: {{ searchIdSub.getValue() }}
       </pre>
     </div>
   `,
@@ -47,74 +45,24 @@ import { PokemonService } from '../services/pokemon.service';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonControlsComponent implements OnInit, OnDestroy {
-  @ViewChild('btnMinusTwo', { static: true, read: ElementRef })
-  btnMinusTwo!: ElementRef<HTMLButtonElement>;
+export class PokemonControlsComponent {
+  readonly min = 1;
+  readonly max = 100;
 
-  @ViewChild('btnMinusOne', { static: true, read: ElementRef })
-  btnMinusOne!: ElementRef<HTMLButtonElement>;
-
-  @ViewChild('btnAddOne', { static: true, read: ElementRef })
-  btnAddOne!: ElementRef<HTMLButtonElement>;
-
-  @ViewChild('btnAddTwo', { static: true, read: ElementRef })
-  btnAddTwo!: ElementRef<HTMLButtonElement>;
-
-  @ViewChild('f', { static: true, read: NgForm })
-  myForm!: NgForm;
-
-  searchId = 1;
   pokemonService = inject(PokemonService);
-  subscription!: Subscription;
+  searchIdSub = new BehaviorSubject(1);
 
-  ngOnInit() {
-    const btnMinusTwo$ = this.createButtonClickObservable(this.btnMinusTwo, -2);
-    const btnMinusOne$ = this.createButtonClickObservable(this.btnMinusOne, -1);
-    const btnAddOne$ = this.createButtonClickObservable(this.btnAddOne, 1);
-    const btnAddTwo$ = this.createButtonClickObservable(this.btnAddTwo, 2);
+  updatePokemonId(delta: number) {
+    this.pokemonService.updatePokemonIdByDelta({ delta, min: this.min, max: this.max })
+  }
 
-    const inputId$ = this.myForm.form.valueChanges
+  constructor() {
+    this.searchIdSub
       .pipe(
         debounceTime(300),
-        distinctUntilChanged((prev, curr) => prev.searchId === curr.searchId),
-        filter((form) => form.searchId >= 1 && form.searchId <= 100),
-        map((form) => form.searchId),
-        map((value) => ({
-          value,
-          action: POKEMON_ACTION.OVERWRITE,
-        }))
-      );
-
-    this.subscription = merge(btnMinusTwo$, btnMinusOne$, btnAddOne$, btnAddTwo$, inputId$)
-      .pipe(
-        scan((acc, { value, action }) => {
-          if (action === POKEMON_ACTION.OVERWRITE) {
-            return value;
-          } else if (action === POKEMON_ACTION.ADD) {
-            const potentialValue = acc + value;
-            if (potentialValue >= 1 && potentialValue <= 100) {
-              return potentialValue;
-            } else if (potentialValue < 1) {
-              return 1;
-            }
-
-            return 100;
-          }
-
-          return acc;
-        }, 1),
-        startWith(1),
-        shareReplay(1),
-      ).subscribe((pokemonId) => this.pokemonService.updatePokemonId(pokemonId));
-  }
-
-  createButtonClickObservable(ref: ElementRef<HTMLButtonElement>, value: number) {
-    return fromEvent(ref.nativeElement, 'click').pipe(
-      map(() => ({ value, action: POKEMON_ACTION.ADD }))
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+        distinctUntilChanged(),
+        filter((value) => this.min >= 1 && value <= this.max),
+        takeUntilDestroyed()
+      ).subscribe((value) => this.pokemonService.updatePokemonId(value));
   }
 }
