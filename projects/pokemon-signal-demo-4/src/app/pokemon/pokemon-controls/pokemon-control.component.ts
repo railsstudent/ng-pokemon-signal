@@ -61,7 +61,7 @@ export class PokemonControlsComponent {
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        filter((value) => this.min >= 1 && value <= this.max),
+        filter((value) => value >= this.min && value <= this.max),
         takeUntilDestroyed()
       ).subscribe((value) => this.pokemonService.updatePokemonId(value));
   }
