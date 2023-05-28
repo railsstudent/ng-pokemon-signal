@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, Observable, Subject, map, switchMap } from 'rxjs';
+import { BehaviorSubject, map, switchMap } from 'rxjs';
 import { FlattenPokemon, Pokemon } from '../interfaces/pokemon.interface';
 
 const EMPTY_POKEMON: FlattenPokemon = {
@@ -20,7 +20,7 @@ const retrievePokemonFn = () => {
   return (id: number) => httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${id}`);
 }
 
-const pokemonTransformer = (pokemon: Pokemon) => {
+const pokemonTransformer = (pokemon: Pokemon): FlattenPokemon => {
   const abilities = pokemon.abilities.map(({ ability, is_hidden }) => ({
     name: ability.name,
     is_hidden
@@ -52,7 +52,7 @@ const pokemonTransformer = (pokemon: Pokemon) => {
 export class PokemonService {
   private readonly pokemonIdSub = new BehaviorSubject(1);
   private retrievePokemon = retrievePokemonFn();
-  private readonly pokemon$: Observable<FlattenPokemon> =  this.pokemonIdSub
+  private readonly pokemon$ =  this.pokemonIdSub
     .pipe(
       switchMap((id) => this.retrievePokemon(id)),
       map((pokemon) => pokemonTransformer(pokemon))

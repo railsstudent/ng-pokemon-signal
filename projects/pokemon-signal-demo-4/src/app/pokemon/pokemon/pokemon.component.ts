@@ -47,6 +47,5 @@ import { PokemonService } from '../services/pokemon.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonComponent {
-  pokemonService = inject(PokemonService);
-  pokemon = this.pokemonService.pokemon;
+  pokemon = inject(PokemonService).pokemon;
 }
