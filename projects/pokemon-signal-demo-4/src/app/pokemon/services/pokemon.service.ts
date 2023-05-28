@@ -21,24 +21,26 @@ const retrievePokemonFn = () => {
 }
 
 const pokemonTransformer = (pokemon: Pokemon) => {
-  const abilities = pokemon.abilities.map((ability) => ({
-    name: ability.ability.name,
-    is_hidden: ability.is_hidden
+  const abilities = pokemon.abilities.map(({ ability, is_hidden }) => ({
+    name: ability.name,
+    is_hidden
   }));
 
-  const stats = pokemon.stats.map((stat) => ({
-    name: stat.stat.name,
-    effort: stat.effort,
-    base_stat: stat.base_stat,
+  const stats = pokemon.stats.map(({ stat, effort, base_stat }) => ({
+    name: stat.name,
+    effort,
+    base_stat,
   }));
+
+  const { id, name, height, weight, sprites } = pokemon;
 
   return {
-    id: pokemon.id,
-    name: pokemon.name,
-    height: pokemon.height,
-    weight: pokemon.weight,
-    back_shiny: pokemon.sprites.back_shiny,
-    front_shiny: pokemon.sprites.front_shiny,
+    id,
+    name,
+    height,
+    weight,
+    back_shiny: sprites.back_shiny,
+    front_shiny: sprites.front_shiny,
     abilities,
     stats,
   }
