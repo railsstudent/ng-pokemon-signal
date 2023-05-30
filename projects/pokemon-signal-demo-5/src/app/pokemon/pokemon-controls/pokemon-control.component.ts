@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { PokemonService } from '../services/pokemon.service';
+import { searchInput } from './custom-operators/search-input.operator';
 
 @Component({
   selector: 'app-pokemon-controls',
@@ -59,10 +59,7 @@ export class PokemonControlsComponent {
   constructor() {
     this.searchIdSub
       .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        filter((value) => value >= this.min && value <= this.max),
-        takeUntilDestroyed()
+        searchInput(this.min, this.max)
       ).subscribe((value) => this.pokemonService.updatePokemonId(value));
   }
 }
