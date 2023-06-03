@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { PokemonComponent } from './pokemon/pokemon/pokemon.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
-  template: `<div>test</div>`,
+  imports: [PokemonComponent],
+  template: `<app-pokemon></app-pokemon>`,
   styles: [`
     :host {
       display: block;
