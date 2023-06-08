@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, map, switchMap } from 'rxjs';
-import { FlattenPokemon, Pokemon } from '../interfaces/pokemon.interface';
+import { DisplayPokemon, Pokemon } from '../interfaces/pokemon.interface';
 
-const EMPTY_POKEMON: FlattenPokemon = {
+const initialValue: DisplayPokemon = {
   id: -1,
   name: '',
   height: -1,
@@ -20,7 +20,7 @@ const retrievePokemonFn = () => {
   return (id: number) => httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${id}`);
 }
 
-const pokemonTransformer = (pokemon: Pokemon): FlattenPokemon => {
+const pokemonTransformer = (pokemon: Pokemon): DisplayPokemon => {
   const abilities = pokemon.abilities.map(({ ability, is_hidden }) => ({
     name: ability.name,
     is_hidden
@@ -57,7 +57,17 @@ export class PokemonService {
       switchMap((id) => this.retrievePokemon(id)),
       map((pokemon) => pokemonTransformer(pokemon))
     );
-  pokemon = toSignal(this.pokemon$, { initialValue: EMPTY_POKEMON });
+  pokemon = toSignal(this.pokemon$, { initialValue });
+
+  rowData = computed(() => {
+    const { id, name, height, weight } = this.pokemon();
+    return [
+      { text: 'Id: ', value: id },
+      { text: 'Name: ', value: name },
+      { text: 'Height: ', value: height },
+      { text: 'Weight: ', value: weight },
+    ];
+  });
 
   updatePokemonId(pokemonId: number) {
     this.pokemonIdSub.next(pokemonId); 

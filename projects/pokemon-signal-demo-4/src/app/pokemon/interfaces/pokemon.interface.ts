@@ -24,7 +24,7 @@ export interface Pokemon {
   }[]
 }
 
-export type FlattenPokemon = Omit<Pokemon, 'sprites'| 'stats' | 'abilities'> & {
+export type DisplayPokemon = Omit<Pokemon, 'sprites'| 'stats' | 'abilities'> & {
   back_shiny: string;
   front_shiny: string;
   stats: {

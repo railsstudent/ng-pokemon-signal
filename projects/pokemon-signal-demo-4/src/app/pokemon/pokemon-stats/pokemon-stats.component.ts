@@ -1,6 +1,6 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { FlattenPokemon } from '../interfaces/pokemon.interface';
+import { DisplayPokemon } from '../interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-stats',
@@ -45,5 +45,5 @@ import { FlattenPokemon } from '../interfaces/pokemon.interface';
 })
 export class PokemonStatsComponent {
   @Input({ required: true })
-  pokemon!: FlattenPokemon;
+  pokemon!: DisplayPokemon;
 }
