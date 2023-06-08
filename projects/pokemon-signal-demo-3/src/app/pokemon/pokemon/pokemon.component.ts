@@ -1,12 +1,19 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
 import { retrievePokemonFn } from './retrieve-pokemon';
+import { DisplayPokemon } from './interfaces/pokemon.interface';
 
-const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
-
+const initialValue: DisplayPokemon = {
+  id: -1,
+  name: '',
+  height: -1,
+  weight: -1,
+  front_shiny: '',
+  back_shiny: '',
+}
 @Component({
   selector: 'app-pokemon',
   standalone: true,
@@ -18,10 +25,7 @@ const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master
     <div>
       <ng-container>
         <div class="pokemon-container">
-          <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Id: ', value: pokemon()?.id }"></ng-container>
-          <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Name: ', value: pokemon()?.name }"></ng-container>
-          <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Height: ', value: pokemon()?.height }"></ng-container>
-          <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Weight: ', value: pokemon()?.weight }"></ng-container>
+          <ng-container *ngTemplateOutlet="details; context: { $implicit: rowData() }"></ng-container>
         </div>
         <div class="container">
           <img [src]="pokemon()?.front_shiny" />
@@ -34,10 +38,10 @@ const pokemonBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master
       <input type="number" [ngModel]="searchIdSub.getValue()" (ngModelChange)="searchIdSub.next($event)"
         name="searchId" id="searchId" />
     </div>
-    <ng-template #details let-name let-value="value">
-      <label>
-        <span style="font-weight: bold; color: #aaa">{{ name }}</span>
-        <span>{{ value }}</span>
+    <ng-template #details let-rowData>
+      <label *ngFor="let data of rowData">
+        <span style="font-weight: bold; color: #aaa">{{ data.text }}</span>
+        <span>{{ data.value }}</span>
       </label>
     </ng-template>
   `,
@@ -84,6 +88,16 @@ export class PokemonComponent {
   retrievePokemon = retrievePokemonFn();
   currentPokemonIdSub = new BehaviorSubject(1);
   pokemon = toSignal(this.currentPokemonIdSub.pipe(switchMap((id) => this.retrievePokemon(id))));
+
+  rowData = computed(() => {
+    const { id, name, height, weight } = this.pokemon() || initialValue;
+    return [
+      { text: 'Id: ', value: id },
+      { text: 'Name: ', value: name },
+      { text: 'Height: ', value: height },
+      { text: 'Weight: ', value: weight },
+    ];
+  });
 
   updatePokemonId(delta: number) {
     const newId = this.currentPokemonIdSub.getValue() + delta;

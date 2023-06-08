@@ -9,3 +9,7 @@ export interface Pokemon {
     }
 }
   
+export type DisplayPokemon = Omit<Pokemon, 'sprites'> & {
+  back_shiny: string;
+  front_shiny: string;
+};
