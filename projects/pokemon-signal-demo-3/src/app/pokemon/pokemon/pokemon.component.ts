@@ -28,8 +28,8 @@ const initialValue: DisplayPokemon = {
           <ng-container *ngTemplateOutlet="details; context: { $implicit: rowData() }"></ng-container>
         </div>
         <div class="container">
-          <img [src]="pokemon()?.front_shiny" />
-          <img [src]="pokemon()?.back_shiny" />
+          <img [src]="pokemon().front_shiny" />
+          <img [src]="pokemon().back_shiny" />
         </div>
       </ng-container>
     </div>
@@ -87,10 +87,10 @@ export class PokemonComponent {
   searchIdSub = new BehaviorSubject(1);
   retrievePokemon = retrievePokemonFn();
   currentPokemonIdSub = new BehaviorSubject(1);
-  pokemon = toSignal(this.currentPokemonIdSub.pipe(switchMap((id) => this.retrievePokemon(id))));
+  pokemon = toSignal(this.currentPokemonIdSub.pipe(switchMap((id) => this.retrievePokemon(id))), { initialValue });
 
   rowData = computed(() => {
-    const { id, name, height, weight } = this.pokemon() || initialValue;
+    const { id, name, height, weight } = this.pokemon();
     return [
       { text: 'Id: ', value: id },
       { text: 'Name: ', value: name },
