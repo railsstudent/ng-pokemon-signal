@@ -24,16 +24,20 @@ export interface Pokemon {
   }[]
 }
 
+export interface Statistics {
+  name: string;
+  effort: number;
+  baseStat: number;
+};
+
+export interface Ability {
+  name: string;
+  isHidden: boolean;
+};
+
 export type DisplayPokemon = Omit<Pokemon, 'sprites'| 'stats' | 'abilities'> & {
   back_shiny: string;
   front_shiny: string;
-  stats: {
-    name: string;
-    base_stat: number;
-    effort: number;
-  }[];
-  abilities: {
-    name: string;
-    is_hidden: boolean;
-  }[];
+  stats: Statistics[];
+  abilities: Ability[];
 }

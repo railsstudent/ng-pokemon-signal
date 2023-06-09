@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, map, switchMap } from 'rxjs';
-import { DisplayPokemon, Pokemon } from '../interfaces/pokemon.interface';
+import { Ability, DisplayPokemon, Pokemon } from '../interfaces/pokemon.interface';
 
 const initialValue: DisplayPokemon = {
   id: -1,
@@ -21,15 +21,15 @@ const retrievePokemonFn = () => {
 }
 
 const pokemonTransformer = (pokemon: Pokemon): DisplayPokemon => {
-  const abilities = pokemon.abilities.map(({ ability, is_hidden }) => ({
+  const abilities: Ability[] = pokemon.abilities.map(({ ability, is_hidden }) => ({
     name: ability.name,
-    is_hidden
+    isHidden: is_hidden
   }));
 
   const stats = pokemon.stats.map(({ stat, effort, base_stat }) => ({
     name: stat.name,
     effort,
-    base_stat,
+    baseStat: base_stat,
   }));
 
   const { id, name, height, weight, sprites } = pokemon;

@@ -10,7 +10,7 @@ import { DisplayPokemon } from '../interfaces/pokemon.interface';
     <div style="padding: 0.5rem;">
       <p>Stats</p>
       <div *ngFor="let stat of pokemon.stats" class="stats-container">
-        <ng-container *ngTemplateOutlet="stats; context: { $implicit: stat.name, effort: stat.effort, baseStat: stat.base_stat }"></ng-container>
+        <ng-container *ngTemplateOutlet="stats; context: { $implicit: stat.name, effort: stat.effort, baseStat: stat.baseStat }"></ng-container>
       </div>
     </div>
     <ng-template #stats let-name let-baseStat="baseStat" let-effort="effort">
