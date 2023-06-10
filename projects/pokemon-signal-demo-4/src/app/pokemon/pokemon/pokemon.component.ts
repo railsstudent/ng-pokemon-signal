@@ -16,11 +16,11 @@ import { PokemonService } from '../services/pokemon.service';
     <div>
       <ng-container>
         <div class="container">
-          <img [src]="pokemon().front_shiny" />
-          <img [src]="pokemon().back_shiny" />
+          <img [src]="pokemon().frontShiny" />
+          <img [src]="pokemon().backShiny" />
         </div>
         <app-pokemon-personal [rowData]="rowData()"></app-pokemon-personal>
-        <app-pokemon-stats [pokemon]="pokemon()"></app-pokemon-stats>
+        <app-pokemon-stats [stats]="pokemon().stats"></app-pokemon-stats>
         <app-pokemon-abilities [abilities]="pokemon().abilities"></app-pokemon-abilities>
       </ng-container>
     </div>

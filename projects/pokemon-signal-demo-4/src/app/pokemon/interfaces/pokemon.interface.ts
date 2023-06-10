@@ -36,8 +36,8 @@ export interface Ability {
 };
 
 export type DisplayPokemon = Omit<Pokemon, 'sprites'| 'stats' | 'abilities'> & {
-  back_shiny: string;
-  front_shiny: string;
+  backShiny: string;
+  frontShiny: string;
   stats: Statistics[];
   abilities: Ability[];
 }
