@@ -9,9 +9,9 @@ import { DisplayPokemon, Statistics } from '../interfaces/pokemon.interface';
   template: `
     <div style="padding: 0.5rem;">
       <p>Stats</p>
-      <ng-container *ngTemplateOutlet="stats; context: { $implicit: stats }"></ng-container>
+      <ng-container *ngTemplateOutlet="content; context: { $implicit: stats }"></ng-container>
     </div>
-    <ng-template #stats let-stats>
+    <ng-template #content let-stats>
       <div *ngFor="let stat of stats" class="stats-container">  
         <label><span style="font-weight: bold; color: #aaa">Name: </span>
           <span>{{ stat.name }}</span>
