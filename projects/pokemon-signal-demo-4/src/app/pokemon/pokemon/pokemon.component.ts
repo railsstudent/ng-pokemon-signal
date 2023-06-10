@@ -21,7 +21,7 @@ import { PokemonService } from '../services/pokemon.service';
         </div>
         <app-pokemon-personal [rowData]="rowData()"></app-pokemon-personal>
         <app-pokemon-stats [pokemon]="pokemon()"></app-pokemon-stats>
-        <app-pokemon-abilities [pokemon]="pokemon()"></app-pokemon-abilities>
+        <app-pokemon-abilities [abilities]="pokemon().abilities"></app-pokemon-abilities>
       </ng-container>
     </div>
     <app-pokemon-controls></app-pokemon-controls>
