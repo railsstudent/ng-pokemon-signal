@@ -2,7 +2,7 @@ import { AsyncPipe, NgComponentOutlet, NgFor } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Injector, Input, OnChanges, QueryList, SimpleChanges, ViewChildren, inject } from '@angular/core';
 import { Observable, fromEvent, map, merge, startWith } from 'rxjs';
 import { createPokemonInjectorFn } from '../injectors/pokemon.injector';
-import { FlattenPokemon } from '../interfaces/pokemon.interface';
+import { DisplayPokemon } from '../interfaces/pokemon.interface';
 import { PokemonAbilitiesComponent } from '../pokemon-abilities/pokemon-abilities.component';
 import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component';
 
@@ -49,7 +49,7 @@ type DynamicComponent = (typeof PokemonAbilitiesComponent | typeof PokemonStatsC
 })
 export class PokemonTabComponent implements AfterViewInit, OnChanges {
   @Input()
-  pokemon!: FlattenPokemon;
+  pokemon!: DisplayPokemon;
 
   @ViewChildren('selection', { read: ElementRef })
   selections!: QueryList<ElementRef<HTMLLinkElement>>;
