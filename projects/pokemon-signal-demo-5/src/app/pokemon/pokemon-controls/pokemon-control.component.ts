@@ -3,22 +3,17 @@ import { FormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { PokemonService } from '../services/pokemon.service';
 import { searchInput } from './custom-operators/search-input.operator';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-pokemon-controls',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, NgFor],
   template: `
     <div class="container">
-      <button class="btn" (click)="updatePokemonId(-2)">-2</button>
-      <button class="btn" (click)="updatePokemonId(-1)">-1</button>
-      <button class="btn" (click)="updatePokemonId(1)">+1</button>
-      <button class="btn" (click)="updatePokemonId(2)">+2</button>
+      <button class="btn" *ngFor="let delta of [-2, -1, 1, 2]" (click)="updatePokemonId(delta)">{{delta < 0 ? delta : '+' + delta }}</button>
       <input type="number" [ngModel]="searchIdSub.getValue()" (ngModelChange)="searchIdSub.next($event)"
         name="searchId" id="searchId" />
-      <pre>
-        searchId: {{ searchIdSub.getValue() }}
-      </pre>
     </div>
   `,
   styles: [`
