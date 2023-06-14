@@ -11,7 +11,7 @@ import { NgFor } from '@angular/common';
   imports: [FormsModule, NgFor],
   template: `
     <div class="container">
-    <button class="btn" *ngFor="let delta of [-2, -1, 1, 2]" (click)="updatePokemonId(delta)">{{delta < 0 ? delta : '+' + delta }}</button>
+      <button class="btn" *ngFor="let delta of [-2, -1, 1, 2]" (click)="updatePokemonId(delta)">{{delta < 0 ? delta : '+' + delta }}</button>
       <input type="number" [ngModel]="searchIdSub.getValue()" (ngModelChange)="searchIdSub.next($event)"
         name="searchId" id="searchId" />
      </div>
