@@ -16,12 +16,12 @@ import { PokemonService } from '../services/pokemon.service';
     <div>
       <ng-container>
         <div class="container">
-          <img [src]="pokemon().front_shiny" />
-          <img [src]="pokemon().back_shiny" />
+          <img [src]="pokemon().frontShiny" />
+          <img [src]="pokemon().backShiny" />
         </div>
-        <app-pokemon-personal [pokemon]="pokemon()"></app-pokemon-personal>
-        <app-pokemon-stats [pokemon]="pokemon()"></app-pokemon-stats>
-        <app-pokemon-abilities [pokemon]="pokemon()"></app-pokemon-abilities>
+        <app-pokemon-personal [rowData]="rowData()"></app-pokemon-personal>
+        <app-pokemon-stats [stats]="pokemon().stats"></app-pokemon-stats>
+        <app-pokemon-abilities [abilities]="pokemon().abilities"></app-pokemon-abilities>
       </ng-container>
     </div>
     <app-pokemon-controls></app-pokemon-controls>
@@ -47,5 +47,7 @@ import { PokemonService } from '../services/pokemon.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonComponent {
-  pokemon = inject(PokemonService).pokemon;
+  readonly pokemonService = inject(PokemonService);
+  pokemon = this.pokemonService.pokemon;
+  rowData = this.pokemonService.rowData;
 }

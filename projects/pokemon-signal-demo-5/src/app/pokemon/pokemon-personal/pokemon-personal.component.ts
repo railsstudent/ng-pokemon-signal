@@ -1,21 +1,19 @@
-import { NgTemplateOutlet } from '@angular/common';
+import { NgFor, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { FlattenPokemon } from '../interfaces/pokemon.interface';
+import { DisplayPokemon } from '../interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-personal',
   standalone: true,
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, NgFor],
   template:`
     <div class="pokemon-container" style="padding: 0.5rem;">
-      <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Id: ', value: pokemon.id }"></ng-container>
-      <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Name: ', value: pokemon.name }"></ng-container>
-      <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Height: ', value: pokemon.height }"></ng-container>
-      <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Weight: ', value: pokemon.weight }"></ng-container>
+      <ng-container *ngTemplateOutlet="details; context: { $implicit: rowData }"></ng-container>
     </div>
-    <ng-template #details let-name let-value="value">
-      <label><span style="font-weight: bold; color: #aaa">{{ name }}</span>
-        <span>{{ value }}</span>
+    <ng-template #details let-rowData>
+      <label *ngFor="let data of rowData">
+        <span style="font-weight: bold; color: #aaa">{{ data.text }}</span>
+        <span>{{ data.value }}</span>
       </label>
     </ng-template>
   `,
@@ -34,5 +32,5 @@ import { FlattenPokemon } from '../interfaces/pokemon.interface';
 })
 export class PokemonPersonalComponent {
   @Input({ required: true })
-  pokemon!: FlattenPokemon;
+  rowData!: ({ text: string, value: string } | { text: string, value: number })[];
 }
