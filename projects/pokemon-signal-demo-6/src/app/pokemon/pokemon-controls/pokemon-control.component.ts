@@ -1,6 +1,6 @@
 import { NgFor } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, merge, Subscription } from 'rxjs';
 import { PokemonService } from '../services/pokemon.service';
 import { emitPokemonId } from './custom-operators/emit-pokemon-id.operator';
