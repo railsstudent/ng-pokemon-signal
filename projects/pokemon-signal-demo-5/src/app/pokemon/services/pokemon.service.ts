@@ -4,7 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, map, switchMap } from 'rxjs';
 import { FlattenPokemon, Pokemon } from '../interfaces/pokemon.interface';
 
-const EMPTY_POKEMON: FlattenPokemon = {
+const initialValue: FlattenPokemon = {
   id: -1,
   name: '',
   height: -1,
@@ -33,7 +33,7 @@ const pokemonTransformer = (pokemon: Pokemon): FlattenPokemon => {
   }));
 
   const { id, name, height, weight, sprites } = pokemon;
-
+  
   return {
     id,
     name,
@@ -57,7 +57,7 @@ export class PokemonService {
       switchMap((id) => this.retrievePokemon(id)),
       map((pokemon) => pokemonTransformer(pokemon))
     );
-  pokemon = toSignal(this.pokemon$, { initialValue: EMPTY_POKEMON });
+  pokemon = toSignal(this.pokemon$, { initialValue });
 
   updatePokemonId(pokemonId: number) {
     this.pokemonIdSub.next(pokemonId); 
