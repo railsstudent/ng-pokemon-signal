@@ -18,7 +18,7 @@ import { PokemonService } from '../services/pokemon.service';
           <img [src]="pokemon().frontShiny" />
           <img [src]="pokemon().backShiny" />
         </div>
-        <app-pokemon-personal [rowData]="rowData()" ></app-pokemon-personal>
+        <app-pokemon-personal [personalData]="personalData()" ></app-pokemon-personal>
         <app-pokemon-tab [pokemon]="pokemon()"></app-pokemon-tab>
       </ng-container>
     </div>
@@ -47,5 +47,5 @@ import { PokemonService } from '../services/pokemon.service';
 export class PokemonComponent {
   service = inject(PokemonService);
   pokemon = this.service.pokemon;
-  rowData = this.service.rowData;
+  personalData = this.service.personalData;
 }

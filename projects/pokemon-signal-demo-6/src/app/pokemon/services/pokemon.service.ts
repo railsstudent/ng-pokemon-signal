@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, Subject, map, switchMap } from 'rxjs';
 import { Ability, DisplayPokemon, Pokemon, Statistics } from '../interfaces/pokemon.interface';
 import { HttpClient } from '@angular/common/http';
+import { PokemonDelta } from '../interfaces/pokemon-control.interface';
 
 const initialValue: DisplayPokemon = {
   id: -1,
@@ -14,11 +15,6 @@ const initialValue: DisplayPokemon = {
   abilities: [],
   stats: [],
 };
-
-const retrievePokemonFn = () => {
-  const httpClient = inject(HttpClient);
-  return (id: number) => httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${id}`);
-}
 
 const pokemonTransformer = (pokemon: Pokemon): DisplayPokemon => {
   const { id, name, height, weight, sprites, abilities: a, stats: statistics } = pokemon;
@@ -51,16 +47,16 @@ const pokemonTransformer = (pokemon: Pokemon): DisplayPokemon => {
 })
 export class PokemonService {
   private readonly pokemonIdSub = new BehaviorSubject(1);
-  readonly pokemonId$ = this.pokemonIdSub.asObservable();
-  private retrievePokemon = retrievePokemonFn();
+  private readonly httpClient = inject(HttpClient);
+
   private readonly pokemon$ =  this.pokemonIdSub
     .pipe(
-      switchMap((id) => this.retrievePokemon(id)),
+      switchMap((id) => this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${id}`)),
       map((pokemon) => pokemonTransformer(pokemon))
     );
   pokemon = toSignal(this.pokemon$, { initialValue });
 
-  rowData = computed(() => {
+  personalData = computed(() => {
     const { id, name, height, weight } = this.pokemon();
     return [
       { text: 'Id: ', value: id },
@@ -70,13 +66,13 @@ export class PokemonService {
     ];
   });
 
-  updatePokemonId(pokemonId: number) {
-    this.pokemonIdSub.next(pokemonId); 
-  }
-
-  updatePokemonIdByDelta(input: { delta: number; min: number; max: number }) {
-    const potentialId = this.pokemonIdSub.getValue() + input.delta;
-    const newId = Math.min(input.max, Math.max(input.min, potentialId));
-    this.pokemonIdSub.next(newId); 
+  updatePokemonId(input: PokemonDelta | number) {
+    if (typeof input === 'number') {
+      this.pokemonIdSub.next(input); 
+    } else {
+      const potentialId = this.pokemonIdSub.getValue() + input.delta;
+      const newId = Math.min(input.max, Math.max(input.min, potentialId));
+      this.pokemonIdSub.next(newId); 
+    }
   }
 }

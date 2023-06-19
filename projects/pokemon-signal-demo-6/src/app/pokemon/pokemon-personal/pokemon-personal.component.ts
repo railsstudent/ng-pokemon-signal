@@ -7,10 +7,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   imports: [NgTemplateOutlet, NgFor],
   template:`
     <div class="pokemon-container" style="padding: 0.5rem;">
-      <ng-container *ngTemplateOutlet="details; context: { $implicit: rowData }"></ng-container>
+      <ng-container *ngTemplateOutlet="details; context: { $implicit: personalData }"></ng-container>
     </div>
-    <ng-template #details let-rowData>
-      <label *ngFor="let data of rowData">
+    <ng-template #details let-personalData>
+      <label *ngFor="let data of personalData">
         <span style="font-weight: bold; color: #aaa">{{ data.text }}</span>
         <span>{{ data.value }}</span>
       </label>
@@ -31,5 +31,5 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class PokemonPersonalComponent {
   @Input({ required: true })
-  rowData!: ({ text: string, value: string } | { text: string, value: number })[];
+  personalData!: ({ text: string, value: string } | { text: string, value: number })[];
 }
