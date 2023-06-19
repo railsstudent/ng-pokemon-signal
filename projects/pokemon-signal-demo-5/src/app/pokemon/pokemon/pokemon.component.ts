@@ -15,8 +15,8 @@ import { PokemonService } from '../services/pokemon.service';
     </h1>
     <div>
       <div class="container">
-        <img [src]="pokemon().front_shiny" />
-        <img [src]="pokemon().back_shiny" />
+        <img [src]="pokemon().frontShiny" />
+        <img [src]="pokemon().backShiny" />
       </div>
       <app-pokemon-personal [pokemon]="pokemon()"></app-pokemon-personal>
       <app-pokemon-stats [pokemon]="pokemon()"></app-pokemon-stats>

@@ -2,34 +2,30 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, map, switchMap } from 'rxjs';
-import { FlattenPokemon, Pokemon } from '../interfaces/pokemon.interface';
+import { DisplayPokemon, Pokemon } from '../interfaces/pokemon.interface';
+import { PokemonDelta } from '../interfaces/pokemon-control.interface';
 
-const initialValue: FlattenPokemon = {
+const initialValue: DisplayPokemon = {
   id: -1,
   name: '',
   height: -1,
   weight: -1,
-  back_shiny: '',
-  front_shiny: '',
+  backShiny: '',
+  frontShiny: '',
   abilities: [],
   stats: [],
 };
 
-const retrievePokemonFn = () => {
-  const httpClient = inject(HttpClient);
-  return (id: number) => httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${id}`);
-}
-
-const pokemonTransformer = (pokemon: Pokemon): FlattenPokemon => {
+const pokemonTransformer = (pokemon: Pokemon): DisplayPokemon => {
   const abilities = pokemon.abilities.map(({ ability, is_hidden }) => ({
     name: ability.name,
-    is_hidden
+    isHidden: is_hidden
   }));
 
   const stats = pokemon.stats.map(({ stat, effort, base_stat }) => ({
     name: stat.name,
     effort,
-    base_stat,
+    baseStat: base_stat,
   }));
 
   const { id, name, height, weight, sprites } = pokemon;
@@ -39,8 +35,8 @@ const pokemonTransformer = (pokemon: Pokemon): FlattenPokemon => {
     name,
     height,
     weight,
-    back_shiny: sprites.back_shiny,
-    front_shiny: sprites.front_shiny,
+    backShiny: sprites.back_shiny,
+    frontShiny: sprites.front_shiny,
     abilities,
     stats,
   }
@@ -51,21 +47,22 @@ const pokemonTransformer = (pokemon: Pokemon): FlattenPokemon => {
 })
 export class PokemonService {
   private readonly pokemonIdSub = new BehaviorSubject(1);
-  private retrievePokemon = retrievePokemonFn();
+  private readonly httpClient = inject(HttpClient);
+
   private readonly pokemon$ =  this.pokemonIdSub
     .pipe(
-      switchMap((id) => this.retrievePokemon(id)),
+      switchMap((id) => this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${id}`)),
       map((pokemon) => pokemonTransformer(pokemon))
     );
   pokemon = toSignal(this.pokemon$, { initialValue });
 
-  updatePokemonId(pokemonId: number) {
-    this.pokemonIdSub.next(pokemonId); 
-  }
-
-  updatePokemonIdByDelta(input: { delta: number; min: number; max: number }) {
-    const potentialId = this.pokemonIdSub.getValue() + input.delta;
-    const newId = Math.min(input.max, Math.max(input.min, potentialId));
-    this.pokemonIdSub.next(newId); 
+  updatePokemonId(input: PokemonDelta | number) {
+    if (typeof input === 'number') {
+      this.pokemonIdSub.next(input); 
+    } else {
+      const potentialId = this.pokemonIdSub.getValue() + input.delta;
+      const newId = Math.min(input.max, Math.max(input.min, potentialId));
+      this.pokemonIdSub.next(newId); 
+    }
   }
 }

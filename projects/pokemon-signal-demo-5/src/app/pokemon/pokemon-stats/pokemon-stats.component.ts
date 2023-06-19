@@ -1,6 +1,6 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { FlattenPokemon } from '../interfaces/pokemon.interface';
+import { DisplayPokemon } from '../interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-stats',
@@ -10,7 +10,7 @@ import { FlattenPokemon } from '../interfaces/pokemon.interface';
     <div style="padding: 0.5rem;">
       <p>Stats</p>
       <div *ngFor="let stat of pokemon.stats" class="stats-container">
-        <ng-container *ngTemplateOutlet="stats; context: { $implicit: stat.name, effort: stat.effort, baseStat: stat.base_stat }"></ng-container>
+        <ng-container *ngTemplateOutlet="stats; context: { $implicit: stat.name, effort: stat.effort, baseStat: stat.baseStat }"></ng-container>
       </div>
     </div>
     <ng-template #stats let-name let-baseStat="baseStat" let-effort="effort">
@@ -45,5 +45,5 @@ import { FlattenPokemon } from '../interfaces/pokemon.interface';
 })
 export class PokemonStatsComponent {
   @Input({ required: true })
-  pokemon!: FlattenPokemon;
+  pokemon!: DisplayPokemon;
 }
