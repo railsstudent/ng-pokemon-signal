@@ -18,9 +18,9 @@ import { PokemonService } from '../services/pokemon.service';
         <img [src]="pokemon().frontShiny" />
         <img [src]="pokemon().backShiny" />
       </div>
-      <app-pokemon-personal [pokemon]="pokemon()"></app-pokemon-personal>
-      <app-pokemon-stats [pokemon]="pokemon()"></app-pokemon-stats>
-      <app-pokemon-abilities [pokemon]="pokemon()"></app-pokemon-abilities>
+      <app-pokemon-personal [personalData]="personalData()"></app-pokemon-personal>
+      <app-pokemon-stats [stats]="pokemon().stats"></app-pokemon-stats>
+      <app-pokemon-abilities [abilities]="pokemon().abilities"></app-pokemon-abilities>
     </div>
     <app-pokemon-controls></app-pokemon-controls>
   `,
@@ -45,5 +45,7 @@ import { PokemonService } from '../services/pokemon.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonComponent {
-  pokemon = inject(PokemonService).pokemon;
+  pokemonService = inject(PokemonService);
+  pokemon = this.pokemonService.pokemon;
+  personalData = this.pokemonService.personalData;
 }

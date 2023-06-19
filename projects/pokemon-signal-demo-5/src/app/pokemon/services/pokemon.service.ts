@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, map, switchMap } from 'rxjs';
 import { DisplayPokemon, Pokemon } from '../interfaces/pokemon.interface';
@@ -55,6 +55,15 @@ export class PokemonService {
       map((pokemon) => pokemonTransformer(pokemon))
     );
   pokemon = toSignal(this.pokemon$, { initialValue });
+  personalData = computed(() => {
+    const { id, name, height, weight } = this.pokemon();
+    return [
+      { text: 'Id: ', value: id },
+      { text: 'Name: ', value: name },
+      { text: 'Height: ', value: height },
+      { text: 'Weight: ', value: weight },
+    ];
+  })
 
   updatePokemonId(input: PokemonDelta | number) {
     if (typeof input === 'number') {
