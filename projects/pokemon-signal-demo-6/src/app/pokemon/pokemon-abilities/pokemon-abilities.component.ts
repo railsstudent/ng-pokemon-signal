@@ -10,7 +10,7 @@ import { POKEMON_TOKEN } from '../constants/pokemon.constant';
     <div style="padding: 0.5rem;">
       <p>Abilities</p>
       <div *ngFor="let ability of pokemon.abilities" class="abilities-container">
-        <ng-container *ngTemplateOutlet="abilities; context: { $implicit: ability.name, isHidden: ability.is_hidden }"></ng-container>
+        <ng-container *ngTemplateOutlet="abilities; context: { $implicit: ability.name, isHidden: ability.isHidden }"></ng-container>
       </div>
     </div>
     <ng-template #abilities let-name let-isHidden="isHidden">
