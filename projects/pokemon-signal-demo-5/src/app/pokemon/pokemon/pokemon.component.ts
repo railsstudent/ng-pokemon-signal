@@ -14,15 +14,13 @@ import { PokemonService } from '../services/pokemon.service';
       Display the first 100 pokemon images
     </h1>
     <div>
-      <ng-container>
-        <div class="container">
-          <img [src]="pokemon().frontShiny" />
-          <img [src]="pokemon().backShiny" />
-        </div>
-        <app-pokemon-personal [rowData]="rowData()"></app-pokemon-personal>
-        <app-pokemon-stats [stats]="pokemon().stats"></app-pokemon-stats>
-        <app-pokemon-abilities [abilities]="pokemon().abilities"></app-pokemon-abilities>
-      </ng-container>
+      <div class="container">
+        <img [src]="pokemon().frontShiny" />
+        <img [src]="pokemon().backShiny" />
+      </div>
+      <app-pokemon-personal [personalData]="personalData()"></app-pokemon-personal>
+      <app-pokemon-stats [stats]="pokemon().stats"></app-pokemon-stats>
+      <app-pokemon-abilities [abilities]="pokemon().abilities"></app-pokemon-abilities>
     </div>
     <app-pokemon-controls></app-pokemon-controls>
   `,
@@ -47,7 +45,7 @@ import { PokemonService } from '../services/pokemon.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonComponent {
-  readonly pokemonService = inject(PokemonService);
+  pokemonService = inject(PokemonService);
   pokemon = this.pokemonService.pokemon;
-  rowData = this.pokemonService.rowData;
+  personalData = this.pokemonService.personalData;
 }

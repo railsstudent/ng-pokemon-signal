@@ -48,7 +48,7 @@ export class PokemonControlsComponent {
   searchIdSub = new BehaviorSubject(1);
 
   updatePokemonId(delta: number) {
-    this.pokemonService.updatePokemonIdByDelta({ delta, min: this.min, max: this.max })
+    this.pokemonService.updatePokemonId({ delta, min: this.min, max: this.max })
   }
 
   constructor() {

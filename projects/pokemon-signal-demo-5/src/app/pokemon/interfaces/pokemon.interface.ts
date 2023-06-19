@@ -26,14 +26,14 @@ export interface Pokemon {
 
 export interface Statistics {
   name: string;
-  effort: number;
   baseStat: number;
-};
+  effort: number;
+}
 
 export interface Ability {
   name: string;
   isHidden: boolean;
-};
+}
 
 export type DisplayPokemon = Omit<Pokemon, 'sprites'| 'stats' | 'abilities'> & {
   backShiny: string;

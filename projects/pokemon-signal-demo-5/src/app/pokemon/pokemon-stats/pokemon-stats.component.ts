@@ -1,6 +1,6 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DisplayPokemon, Statistics } from '../interfaces/pokemon.interface';
+import { Statistics } from '../interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-stats',
@@ -12,14 +12,17 @@ import { DisplayPokemon, Statistics } from '../interfaces/pokemon.interface';
       <ng-container *ngTemplateOutlet="content; context: { $implicit: stats }"></ng-container>
     </div>
     <ng-template #content let-stats>
-      <div *ngFor="let stat of stats" class="stats-container">  
-        <label><span style="font-weight: bold; color: #aaa">Name: </span>
+      <div *ngFor="let stat of stats" class="stats-container">
+        <label>
+          <span style="font-weight: bold; color: #aaa">Name: </span>
           <span>{{ stat.name }}</span>
         </label>
-        <label><span style="font-weight: bold; color: #aaa">Base Stat: </span>
+        <label>
+          <span style="font-weight: bold; color: #aaa">Base Stat: </span>
           <span>{{ stat.baseStat }}</span>
         </label>
-        <label><span style="font-weight: bold; color: #aaa">Effort: </span>
+        <label>
+          <span style="font-weight: bold; color: #aaa">Effort: </span>
           <span>{{ stat.effort }}</span>
         </label>
       </div>

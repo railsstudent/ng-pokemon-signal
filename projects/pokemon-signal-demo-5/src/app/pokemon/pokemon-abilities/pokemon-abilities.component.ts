@@ -13,10 +13,12 @@ import { Ability } from '../interfaces/pokemon.interface';
     </div>
     <ng-template #content let-abilities>
       <div *ngFor="let ability of abilities" class="abilities-container">
-        <label><span style="font-weight: bold; color: #aaa">Name: </span>
+        <label>
+          <span style="font-weight: bold; color: #aaa">Name: </span>
           <span>{{ ability.name }}</span>
         </label>
-        <label><span style="font-weight: bold; color: #aaa">Is hidden? </span>
+        <label>
+          <span style="font-weight: bold; color: #aaa">Is hidden? </span>
           <span>{{ ability.isHidden ? 'Yes' : 'No' }}</span>
         </label>
       </div>
