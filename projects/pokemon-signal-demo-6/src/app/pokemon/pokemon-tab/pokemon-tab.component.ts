@@ -16,11 +16,20 @@ import { createPokemonInjectorFn } from './injectors/pokemon.injector';
   ],
   template: `
     <div style="padding: 0.5rem;">
-      <ul>
-        <li><a href="#" (click)="selectComponents('all')">All</a></li>
-        <li><a href="#" (click)="selectComponents('statistics')">Stats</a></li>
-        <li><a href="#" (click)="selectComponents('abilities')">Abilities</a></li>
-      </ul>
+      <div>
+        <div>
+          <input id="all" name="type" type="radio" (click)="selectComponents('all')" />
+          <label for="all">All</label>
+        </div>
+        <div>
+          <input id="stats" name="type" type="radio" (click)="selectComponents('statistics')" />
+          <label for="stats">Stats</label>
+        </div>
+        <div>
+          <input id="ability" name="type" type="radio" (click)="selectComponents('abilities')" />
+          <label for="ability">Abilities</label>
+        </div>
+      </div>
     </div>
     <ng-container *ngFor="let component of dynamicComponents()">
       <ng-container *ngComponentOutlet="component; injector: myInjector"></ng-container>
@@ -31,10 +40,13 @@ import { createPokemonInjectorFn } from './injectors/pokemon.injector';
       list-style-type: none;
     }
 
-    ul {
-      display: flex;
+    input[type="radio"] {
+      margin-right: 0.25rem;
+    }
 
-      li {
+    div > div {
+      display: flex;
+      div {
         flex-grow: 1;
         flex-shrink: 1;
         flex-basis: calc(100% / 3);
