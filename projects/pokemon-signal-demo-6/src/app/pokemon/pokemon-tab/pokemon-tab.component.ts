@@ -1,9 +1,9 @@
 import { NgComponentOutlet, NgFor } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnChanges, OnInit, SimpleChanges, inject, signal } from '@angular/core';
-import { createPokemonInjectorFn } from '../injectors/pokemon.injector';
 import { DisplayPokemon } from '../interfaces/pokemon.interface';
 import { PokemonAbilitiesComponent } from '../pokemon-abilities/pokemon-abilities.component';
 import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component';
+import { createPokemonInjectorFn } from './injectors/pokemon.injector';
 
 @Component({
   selector: 'app-pokemon-tab',
