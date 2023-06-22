@@ -1,26 +1,19 @@
 import { NgFor } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-import { fromEvent, map, merge, Subscription } from 'rxjs';
-import { emitPokemonId } from '../custom-operators/emit-pokemon-id.operator';
-import { searchInput } from '../custom-operators/search-input.operator';
-import { PokemonButtonDirective } from '../directives/pokemon-button.directive';
-import { POKEMON_ACTION } from '../enum/pokemon.enum';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 import { PokemonService } from '../services/pokemon.service';
+import { searchInput } from './custom-operators/search-input.operator';
 
 @Component({
   selector: 'app-pokemon-controls',
   standalone: true,
-  imports: [FormsModule, NgFor, PokemonButtonDirective],
+  imports: [FormsModule, NgFor],
   template: `
     <div class="container">
-      <button *ngFor="let delta of [-2, -1, 1, 2]" class="btn" [appPokemonButton]="delta">
-        {{ delta < 0 ? delta : '+' + delta }}
-      </button>
-      <form #f="ngForm" novalidate>
-        <input type="number" [(ngModel)]="searchId" [ngModelOptions]="{ updateOn: 'blur' }"
-          name="searchId" id="searchId" />
-      </form>
+      <button class="btn" *ngFor="let delta of [-2, -1, 1, 2]" (click)="updatePokemonId(delta)">{{delta < 0 ? delta : '+' + delta }}</button>
+      <input type="number" [ngModel]="searchIdSub.getValue()" (ngModelChange)="searchIdSub.next($event)"
+        name="searchId" id="searchId" />
     </div>
   `,
   styles: [`
@@ -47,27 +40,20 @@ import { PokemonService } from '../services/pokemon.service';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonControlsComponent implements OnDestroy, AfterViewInit {
-  @ViewChildren(PokemonButtonDirective)
-  btns!: QueryList<PokemonButtonDirective>;
+export class PokemonControlsComponent {
+  readonly min = 1;
+  readonly max = 100;
 
-  @ViewChild('f', { static: true, read: NgForm })
-  myForm!: NgForm;
-
-  searchId = 1;
   pokemonService = inject(PokemonService);
-  subscription!: Subscription;
+  searchIdSub = new BehaviorSubject(1);
 
-  ngAfterViewInit(): void {
-    const btns$ = this.btns.map((btn) => btn.click$);
-    const inputId$ = this.myForm.form.valueChanges.pipe(searchInput());
-
-    this.subscription = merge(...btns$, inputId$)
-      .pipe(emitPokemonId())
-      .subscribe((pokemonId) => this.pokemonService.updatePokemonId(pokemonId));
+  updatePokemonId(delta: number) {
+    this.pokemonService.updatePokemonId({ delta, min: this.min, max: this.max })
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+  constructor() {
+    this.searchIdSub
+      .pipe(searchInput(this.min, this.max))
+      .subscribe((value) => this.pokemonService.updatePokemonId(value));
   }
 }
