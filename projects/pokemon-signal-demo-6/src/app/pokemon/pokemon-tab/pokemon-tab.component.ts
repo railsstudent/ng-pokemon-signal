@@ -31,7 +31,7 @@ import { createPokemonInjectorFn } from './injectors/pokemon.injector';
         </div>
       </div>
     </div>
-    <ng-container *ngFor="let component of dynamicComponents()">
+    <ng-container *ngFor="let component of dynamicComponents">
       <ng-container *ngComponentOutlet="component; injector: myInjector"></ng-container>
     </ng-container>
   `,
@@ -65,12 +65,12 @@ export class PokemonTabComponent implements OnChanges, OnInit {
     'all': [PokemonStatsComponent, PokemonAbilitiesComponent],
   }
 
-  dynamicComponents = signal(this.componentMap['all']);
+  dynamicComponents = this.componentMap['all'];
 
   selectComponents(type: string) {
     const components = this.componentMap[type];
-    if (components !== this.dynamicComponents()) {
-      this.dynamicComponents.set(components);
+    if (components !== this.dynamicComponents) {
+      this.dynamicComponents = components;
     }
   }
 
