@@ -53,8 +53,7 @@ export class PokemonControlsComponent {
 
   constructor() {
     this.searchIdSub
-      .pipe(
-        searchInput(this.min, this.max)
-      ).subscribe((value) => this.pokemonService.updatePokemonId(value));
+      .pipe(searchInput(this.min, this.max))
+      .subscribe((value) => this.pokemonService.updatePokemonId(value));
   }
 }
