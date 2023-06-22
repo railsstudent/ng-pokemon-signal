@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef, inject } from '@angular/core';
-import { FlattenPokemon } from '../interfaces/pokemon.interface';
+import { DisplayPokemon } from '../interfaces/pokemon.interface';
 import { PokemonAbilitiesComponent } from '../pokemon-abilities/pokemon-abilities.component';
 import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component';
 
@@ -51,7 +51,7 @@ import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component'
 })
 export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
   @Input()
-  pokemon!: FlattenPokemon;
+  pokemon!: DisplayPokemon;
 
   @ViewChild('vcr', { static: true, read: ViewContainerRef })
   vcr!: ViewContainerRef;
@@ -74,7 +74,7 @@ export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
     return [PokemonAbilitiesComponent];    
   }
 
-  async renderDynamicComponents(currentPokemon?: FlattenPokemon) {
+  async renderDynamicComponents(currentPokemon?: DisplayPokemon) {
     const componentTypes = await this.getComponenTypes();
 
     // clear dynamic components shown in the container previously    
