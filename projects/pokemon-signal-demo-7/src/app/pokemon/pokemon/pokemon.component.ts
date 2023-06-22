@@ -1,10 +1,9 @@
 import { AsyncPipe, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { switchMap } from 'rxjs';
-import { getPokemonId, retrievePokemonFn } from '../helpers/pokemon.http';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PokemonControlsComponent } from '../pokemon-controls/pokemon-control.component';
 import { PokemonPersonalComponent } from '../pokemon-personal/pokemon-personal.component';
 import { PokemonTabComponent } from '../pokemon-tab/pokemon-tab.component';
+import { PokemonService } from '../services/pokemon.service';
 
 @Component({
   selector: 'app-pokemon',
@@ -15,14 +14,12 @@ import { PokemonTabComponent } from '../pokemon-tab/pokemon-tab.component';
       Display the first 100 pokemon images
     </h2>
     <div>
-      <ng-container *ngIf="pokemon$ | async as pokemon">
-        <div class="container">
-          <img [src]="pokemon.front_shiny" />
-          <img [src]="pokemon.back_shiny" />
-        </div>
-        <app-pokemon-personal [pokemon]="pokemon"></app-pokemon-personal>
-        <app-pokemon-tab [pokemon]="pokemon"></app-pokemon-tab>
-      </ng-container>
+      <div class="container">
+        <img [src]="pokemon().frontShiny" />
+        <img [src]="pokemon().backShiny" />
+      </div>
+      <app-pokemon-personal [personalData]="personalData()"></app-pokemon-personal>
+      <app-pokemon-tab [pokemon]="pokemon()"></app-pokemon-tab>
     </div>
     <app-pokemon-controls></app-pokemon-controls>
   `,
@@ -47,6 +44,7 @@ import { PokemonTabComponent } from '../pokemon-tab/pokemon-tab.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonComponent {
-  retrievePokemon = retrievePokemonFn();
-  pokemon$ = getPokemonId().pipe(switchMap((id) => this.retrievePokemon(id)));
+  pokemonService = inject(PokemonService);
+  pokemon = this.pokemonService.pokemon;
+  personalData = this.pokemonService.personalData;
 }
