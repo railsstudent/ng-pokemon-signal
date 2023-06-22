@@ -1,6 +1,6 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { POKEMON_TOKEN } from '../constants/pokemon.constant';
+import { POKEMON_STATS_TOKEN } from '../constants/pokemon.constant';
 
 @Component({
   selector: 'app-pokemon-stats',
@@ -9,20 +9,23 @@ import { POKEMON_TOKEN } from '../constants/pokemon.constant';
   template: `
     <div style="padding: 0.5rem;">
       <p>Stats</p>
-      <div *ngFor="let stat of pokemon.stats" class="stats-container">
-        <ng-container *ngTemplateOutlet="stats; context: { $implicit: stat.name, effort: stat.effort, baseStat: stat.baseStat }"></ng-container>
-      </div>
+      <ng-container *ngTemplateOutlet="content; context: { $implicit: stats }"></ng-container>
     </div>
-    <ng-template #stats let-name let-baseStat="baseStat" let-effort="effort">
-      <label><span style="font-weight: bold; color: #aaa">Name: </span>
-        <span>{{ name }}</span>
-      </label>
-      <label><span style="font-weight: bold; color: #aaa">Base Stat: </span>
-        <span>{{ baseStat }}</span>
-      </label>
-      <label><span style="font-weight: bold; color: #aaa">Effort: </span>
-        <span>{{ effort }}</span>
-      </label>
+    <ng-template #content let-stats>
+      <div *ngFor="let stat of stats" class="stats-container">  
+        <label>
+            <span style="font-weight: bold; color: #aaa">Name: </span>
+            <span>{{ stat.name }}</span>
+          </label>
+          <label>
+            <span style="font-weight: bold; color: #aaa">Base Stat: </span>
+            <span>{{ stat.baseStat }}</span>
+          </label>
+          <label>
+            <span style="font-weight: bold; color: #aaa">Effort: </span>
+            <span>{{ stat.effort }}</span>
+          </label>
+      </div>
     </ng-template>
   `,
   styles: [`
@@ -44,5 +47,5 @@ import { POKEMON_TOKEN } from '../constants/pokemon.constant';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonStatsComponent {
-  pokemon = inject(POKEMON_TOKEN);
+  stats = inject(POKEMON_STATS_TOKEN);
 }

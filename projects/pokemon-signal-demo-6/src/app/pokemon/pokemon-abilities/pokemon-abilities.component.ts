@@ -1,6 +1,6 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { POKEMON_TOKEN } from '../constants/pokemon.constant';
+import { POKEMON_ABILITY_TOKEN } from '../constants/pokemon.constant';
 
 @Component({
   selector: 'app-pokemon-abilities',
@@ -9,17 +9,19 @@ import { POKEMON_TOKEN } from '../constants/pokemon.constant';
   template: `
     <div style="padding: 0.5rem;">
       <p>Abilities</p>
-      <div *ngFor="let ability of pokemon.abilities" class="abilities-container">
-        <ng-container *ngTemplateOutlet="abilities; context: { $implicit: ability.name, isHidden: ability.isHidden }"></ng-container>
-      </div>
+      <ng-container *ngTemplateOutlet="content; context: { $implicit: abilities }"></ng-container>
     </div>
-    <ng-template #abilities let-name let-isHidden="isHidden">
-      <label><span style="font-weight: bold; color: #aaa">Name: </span>
-        <span>{{ name }}</span>
-      </label>
-      <label><span style="font-weight: bold; color: #aaa">Is hidden? </span>
-        <span>{{ isHidden ? 'Yes' : 'No' }}</span>
-      </label>
+    <ng-template #content let-abilities>
+      <div *ngFor="let ability of abilities" class="abilities-container">
+        <label>
+          <span style="font-weight: bold; color: #aaa">Name: </span>
+          <span>{{ ability.name }}</span>
+        </label>
+        <label>
+          <span style="font-weight: bold; color: #aaa">Is hidden? </span>
+          <span>{{ ability.isHidden ? 'Yes' : 'No' }}</span>
+        </label>
+      </div>
     </ng-template>  
   `,
   styles: [`
@@ -41,5 +43,5 @@ import { POKEMON_TOKEN } from '../constants/pokemon.constant';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonAbilitiesComponent {
-  pokemon = inject(POKEMON_TOKEN);
+  abilities = inject(POKEMON_ABILITY_TOKEN);
 }
