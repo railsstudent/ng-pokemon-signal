@@ -9,16 +9,14 @@ import { PokemonService } from '../services/pokemon.service';
   standalone: true,
   imports: [PokemonControlsComponent, PokemonPersonalComponent, PokemonTabComponent],
   template: `
-    <h2>
-      Display the first 100 pokemon images
-    </h2>
+    <h2>Display the first 100 pokemon images</h2>
     <div>
       <ng-container>
         <div class="container">
           <img [src]="pokemon().frontShiny" />
           <img [src]="pokemon().backShiny" />
         </div>
-        <app-pokemon-personal [personalData]="personalData()" ></app-pokemon-personal>
+        <app-pokemon-personal></app-pokemon-personal>
         <app-pokemon-tab [pokemon]="pokemon()"></app-pokemon-tab>
       </ng-container>
     </div>
@@ -45,7 +43,5 @@ import { PokemonService } from '../services/pokemon.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonComponent {
-  service = inject(PokemonService);
-  pokemon = this.service.pokemon;
-  personalData = this.service.personalData;
+  pokemon = inject(PokemonService).pokemon;
 }

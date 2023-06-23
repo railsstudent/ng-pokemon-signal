@@ -18,7 +18,7 @@ import { createPokemonInjectorFn } from './injectors/pokemon.injector';
     <div style="padding: 0.5rem;">
       <div>
         <div>
-          <input id="all" name="type" type="radio" (click)="selectComponents('all')" />
+          <input id="all" name="type" type="radio" (click)="selectComponents('all')" checked />
           <label for="all">All</label>
         </div>
         <div>
