@@ -10,17 +10,15 @@ import { PokemonService } from '../services/pokemon.service';
   standalone: true,
   imports: [PokemonControlsComponent, PokemonAbilitiesComponent, PokemonStatsComponent, PokemonPersonalComponent],
   template: `
-    <h1>
-      Display the first 100 pokemon images
-    </h1>
+    <h2>Display the first 100 pokemon images</h2>
     <div>
       <div class="container">
         <img [src]="pokemon().frontShiny" />
         <img [src]="pokemon().backShiny" />
       </div>
-      <app-pokemon-personal [personalData]="personalData()"></app-pokemon-personal>
-      <app-pokemon-stats [stats]="pokemon().stats"></app-pokemon-stats>
-      <app-pokemon-abilities [abilities]="pokemon().abilities"></app-pokemon-abilities>
+      <app-pokemon-personal></app-pokemon-personal>
+      <app-pokemon-stats></app-pokemon-stats>
+      <app-pokemon-abilities></app-pokemon-abilities>
     </div>
     <app-pokemon-controls></app-pokemon-controls>
   `,
@@ -45,7 +43,5 @@ import { PokemonService } from '../services/pokemon.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonComponent {
-  pokemonService = inject(PokemonService);
-  pokemon = this.pokemonService.pokemon;
-  personalData = this.pokemonService.personalData;
+  pokemon = inject(PokemonService).pokemon;
 }
