@@ -1,6 +1,6 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { POKEMON_STATS_TOKEN } from '../constants/pokemon.constant';
+import { PokemonService } from '../services/pokemon.service';
 
 @Component({
   selector: 'app-pokemon-stats',
@@ -9,7 +9,7 @@ import { POKEMON_STATS_TOKEN } from '../constants/pokemon.constant';
   template: `
     <div style="padding: 0.5rem;">
       <p>Stats</p>
-      <ng-container *ngTemplateOutlet="content; context: { $implicit: stats }"></ng-container>
+      <ng-container *ngTemplateOutlet="content; context: { $implicit: pokemon().stats }"></ng-container>
     </div>
     <ng-template #content let-stats>
       <div *ngFor="let stat of stats" class="stats-container">  
@@ -47,5 +47,5 @@ import { POKEMON_STATS_TOKEN } from '../constants/pokemon.constant';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonStatsComponent {
-  stats = inject(POKEMON_STATS_TOKEN);
+  pokemon = inject(PokemonService).pokemon;
 }

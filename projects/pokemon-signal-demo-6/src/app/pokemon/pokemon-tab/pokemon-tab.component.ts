@@ -1,9 +1,7 @@
 import { NgComponentOutlet, NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnChanges, OnInit, SimpleChanges, inject, signal } from '@angular/core';
-import { DisplayPokemon } from '../interfaces/pokemon.interface';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { PokemonAbilitiesComponent } from '../pokemon-abilities/pokemon-abilities.component';
 import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component';
-import { createPokemonInjectorFn } from './injectors/pokemon.injector';
 
 @Component({
   selector: 'app-pokemon-tab',
@@ -32,7 +30,7 @@ import { createPokemonInjectorFn } from './injectors/pokemon.injector';
       </div>
     </div>
     <ng-container *ngFor="let component of dynamicComponents">
-      <ng-container *ngComponentOutlet="component; injector: myInjector"></ng-container>
+      <ng-container *ngComponentOutlet="component"></ng-container>
     </ng-container>
   `,
   styles: [`
@@ -55,10 +53,7 @@ import { createPokemonInjectorFn } from './injectors/pokemon.injector';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonTabComponent implements OnChanges, OnInit {
-  @Input()
-  pokemon!: DisplayPokemon;
-
+export class PokemonTabComponent {
   componentMap: Record<string, any> = {
     'statistics': [PokemonStatsComponent],
     'abilities': [PokemonAbilitiesComponent],
@@ -72,18 +67,5 @@ export class PokemonTabComponent implements OnChanges, OnInit {
     if (components !== this.dynamicComponents) {
       this.dynamicComponents = components;
     }
-  }
-
-  createPokemonInjector = createPokemonInjectorFn();
-  myInjector!: Injector;
-  markForCheck = inject(ChangeDetectorRef).markForCheck;
-
-  ngOnInit(): void {
-    this.myInjector = this.createPokemonInjector(this.pokemon);
-    this.markForCheck();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.myInjector = this.createPokemonInjector(changes['pokemon'].currentValue);
   }
 }
