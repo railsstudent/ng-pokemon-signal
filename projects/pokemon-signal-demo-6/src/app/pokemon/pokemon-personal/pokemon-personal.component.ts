@@ -31,8 +31,5 @@ import { PokemonService } from '../services/pokemon.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonPersonalComponent {
-  // @Input({ required: true })
-  // personalData!: ({ text: string, value: string } | { text: string, value: number })[];
-
   personalData = inject(PokemonService).personalData;
 }
