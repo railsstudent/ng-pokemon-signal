@@ -34,10 +34,6 @@ import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component'
     </ng-container>
   `,
   styles: [`
-    li {
-      list-style-type: none;
-    }
-
     input[type="radio"] {
       margin-right: 0.25rem;
     }
