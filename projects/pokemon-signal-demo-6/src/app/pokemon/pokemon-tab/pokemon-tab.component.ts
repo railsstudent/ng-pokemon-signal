@@ -29,8 +29,8 @@ import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component'
         </div>
       </div>
     </div>
-    <ng-container *ngFor="let component of dynamicComponents">
-      <ng-container *ngComponentOutlet="component"></ng-container>
+    <ng-container *ngFor="let componentType of dynamicComponents">
+      <ng-container *ngComponentOutlet="componentType"></ng-container>
     </ng-container>
   `,
   styles: [`
