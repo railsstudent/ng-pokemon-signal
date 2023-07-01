@@ -16,7 +16,7 @@ import { PokemonService } from '../services/pokemon.service';
         <img [src]="pokemon().backShiny" />
       </div>
       <app-pokemon-personal></app-pokemon-personal>
-      <app-pokemon-tab [pokemon]="pokemon()></app-pokemon-tab>
+      <app-pokemon-tab></app-pokemon-tab>
     </div>
     <app-pokemon-controls></app-pokemon-controls>
   `,

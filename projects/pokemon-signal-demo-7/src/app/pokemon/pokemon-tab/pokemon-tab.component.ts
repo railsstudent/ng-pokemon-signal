@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewContainerRef, inject } from '@angular/core';
-import { DisplayPokemon } from '../interfaces/pokemon.interface';
-import { PokemonAbilitiesComponent } from '../pokemon-abilities/pokemon-abilities.component';
-import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, OnInit, ViewChild, ViewContainerRef, inject } from '@angular/core';
+
+type SelectionType = 'ALL' | 'STATISTICS' | 'ABILITIES';
 
 @Component({
   selector: 'app-pokemon-tab',
@@ -10,18 +9,15 @@ import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component'
     <div class="container">
       <div>
         <div>
-          <input type="radio" id="all" name="selection" value="all"
-            checked (click)="selection = 'ALL'; renderDynamicComponents();">
+          <input type="radio" id="all" name="selection" value="all" checked (click)="renderComponentsBySelection('ALL');">
           <label for="all">All</label>
         </div>
         <div>
-          <input type="radio" id="stats" name="selection" value="stats"
-            (click)="selection = 'STATISTICS'; renderDynamicComponents();">
+          <input type="radio" id="stats" name="selection" value="stats" (click)="renderComponentsBySelection('STATISTICS');">
           <label for="stats">Stats</label>
         </div>
         <div>
-          <input type="radio" id="abilities" name="selection" value="abilities"
-            (click)="selection = 'ABILITIES'; renderDynamicComponents();">
+          <input type="radio" id="abilities" name="selection" value="abilities" (click)="renderComponentsBySelection('ABILITIES');">
           <label for="abilities">Abilities</label>
         </div>
       </div>
@@ -49,15 +45,12 @@ import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component'
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonTabComponent implements OnInit, OnChanges {
-  @Input()
-  pokemon!: DisplayPokemon;
-
+export class PokemonTabComponent implements OnInit {
   @ViewChild('vcr', { static: true, read: ViewContainerRef })
   vcr!: ViewContainerRef;
 
-  selection: 'ALL' | 'STATISTICS' | 'ABILITIES' = 'ALL';
-  componentRefs: ComponentRef<PokemonStatsComponent | PokemonAbilitiesComponent>[] = [];
+  selection: SelectionType = 'ALL';
+  componentRefs: ComponentRef<any>[] = [];
 
   cdr = inject(ChangeDetectorRef);
 
@@ -83,7 +76,12 @@ export class PokemonTabComponent implements OnInit, OnChanges {
     }
   }
 
-  async renderDynamicComponents(currentPokemon?: DisplayPokemon) {
+  async renderComponentsBySelection(selection: SelectionType) {
+    this.selection = selection;
+    await this.renderDynamicComponents();
+  }
+
+  private async renderDynamicComponents() {
     const componentTypes = await this.getComponenTypes();
 
     // clear dynamic components shown in the container previously    
@@ -91,7 +89,6 @@ export class PokemonTabComponent implements OnInit, OnChanges {
     this.destroyComponentRefs();
     for (const componentType of componentTypes) {
       const newComponentRef = this.vcr.createComponent(componentType);
-      newComponentRef.instance.pokemon = currentPokemon ? currentPokemon : this.pokemon;
       // store component refs created
       this.componentRefs.push(newComponentRef);
       // run change detection in the component and child components
@@ -101,9 +98,5 @@ export class PokemonTabComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.renderDynamicComponents();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.renderDynamicComponents(changes['pokemon'].currentValue);
   }
 }
