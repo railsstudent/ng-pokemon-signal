@@ -1,5 +1,6 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { PokemonService } from '../services/pokemon.service';
 
 @Component({
   selector: 'app-pokemon-personal',
@@ -7,7 +8,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   imports: [NgTemplateOutlet, NgFor],
   template:`
     <div class="pokemon-container" style="padding: 0.5rem;">
-      <ng-container *ngTemplateOutlet="details; context: { $implicit: personalData }"></ng-container>
+      <ng-container *ngTemplateOutlet="details; context: { $implicit: personalData() }"></ng-container>
     </div>
     <ng-template #details let-personalData>
       <label *ngFor="let data of personalData">
@@ -30,6 +31,5 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonPersonalComponent {
-  @Input({ required: true })
-  personalData!: ({ text: string; value: number } | { text: string; value: string; })[];
+  personalData = inject(PokemonService).personalData;
 }

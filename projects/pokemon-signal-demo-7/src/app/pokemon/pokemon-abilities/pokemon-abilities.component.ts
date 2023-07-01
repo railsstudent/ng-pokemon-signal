@@ -1,6 +1,6 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { FlattenPokemon } from '../interfaces/pokemon.interface';
+import { DisplayPokemon } from '../interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-abilities',
@@ -10,14 +10,16 @@ import { FlattenPokemon } from '../interfaces/pokemon.interface';
     <div style="padding: 0.5rem;">
       <p>Abilities</p>
       <div *ngFor="let ability of pokemon.abilities" class="abilities-container">
-        <ng-container *ngTemplateOutlet="abilities; context: { $implicit: ability.name, isHidden: ability.is_hidden }"></ng-container>
+        <ng-container *ngTemplateOutlet="abilities; context: { $implicit: ability.name, isHidden: ability.isHidden }"></ng-container>
       </div>
     </div>
     <ng-template #abilities let-name let-isHidden="isHidden">
-      <label><span style="font-weight: bold; color: #aaa">Name: </span>
+      <label>
+        <span style="font-weight: bold; color: #aaa">Name: </span>
         <span>{{ name }}</span>
       </label>
-      <label><span style="font-weight: bold; color: #aaa">Is hidden? </span>
+      <label>
+        <span style="font-weight: bold; color: #aaa">Is hidden? </span>
         <span>{{ isHidden ? 'Yes' : 'No' }}</span>
       </label>
     </ng-template>  
@@ -42,5 +44,5 @@ import { FlattenPokemon } from '../interfaces/pokemon.interface';
 })
 export class PokemonAbilitiesComponent {
   @Input()
-  pokemon!: FlattenPokemon;
+  pokemon!: DisplayPokemon;
 }

@@ -15,6 +15,6 @@ import { PokemonComponent } from './pokemon/pokemon/pokemon.component';
 })
 export class AppComponent {
   constructor(titleService: Title) {
-    titleService.setTitle('pokemon-signal-demo-7');
+    titleService.setTitle('Pokemon Signal Demo 7');
   }
 }
