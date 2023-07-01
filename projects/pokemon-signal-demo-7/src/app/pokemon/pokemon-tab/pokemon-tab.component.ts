@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import { DisplayPokemon } from '../interfaces/pokemon.interface';
 import { PokemonAbilitiesComponent } from '../pokemon-abilities/pokemon-abilities.component';
 import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component';
@@ -49,7 +49,7 @@ import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component'
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
+export class PokemonTabComponent implements OnInit, OnChanges {
   @Input()
   pokemon!: DisplayPokemon;
 
@@ -74,11 +74,21 @@ export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
     return [PokemonAbilitiesComponent];    
   }
 
+  destroyComponentRefs(): void {
+    // release component refs to avoid memory leak
+    for (const componentRef of this.componentRefs) {
+      if (componentRef) {
+        componentRef.destroy();
+      }
+    }
+  }
+
   async renderDynamicComponents(currentPokemon?: DisplayPokemon) {
     const componentTypes = await this.getComponenTypes();
 
     // clear dynamic components shown in the container previously    
     this.vcr.clear();
+    this.destroyComponentRefs();
     for (const componentType of componentTypes) {
       const newComponentRef = this.vcr.createComponent(componentType);
       newComponentRef.instance.pokemon = currentPokemon ? currentPokemon : this.pokemon;
@@ -95,14 +105,5 @@ export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.renderDynamicComponents(changes['pokemon'].currentValue);
-  }
-
-  ngOnDestroy(): void {
-    // release component refs to avoid memory leak
-    for (const componentRef of this.componentRefs) {
-      if (componentRef) {
-        componentRef.destroy();
-      }
-    }
   }
 }
