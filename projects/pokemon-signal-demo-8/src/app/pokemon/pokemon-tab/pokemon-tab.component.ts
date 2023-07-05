@@ -1,5 +1,5 @@
 import { NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef, inject, TemplateRef, EmbeddedViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EmbeddedViewRef, Input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import { DisplayPokemon, FlattenPokemon } from '../interfaces/pokemon.interface';
 
 @Component({
@@ -102,7 +102,7 @@ import { DisplayPokemon, FlattenPokemon } from '../interfaces/pokemon.interface'
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
+export class PokemonTabComponent implements OnInit, OnChanges {
   @Input()
   pokemon!: DisplayPokemon;
 
@@ -133,11 +133,21 @@ export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
     return [this.abilitiesRef];
   }
 
+  private destroyEmbeddedViewRefs() {
+    // destroy embeddedViewRefs to avoid memory leak
+    for (const viewRef of this.embeddedViewRefs) {
+      if (viewRef) {
+        viewRef.destroy();
+      }
+    }
+  }
+
   renderDynamicTemplates(currentPokemon?: FlattenPokemon) {
     const templateRefs = this.getTemplateRefs();
     const pokemon = currentPokemon ? currentPokemon : this.pokemon;
 
     this.vcr.clear();
+    this.destroyEmbeddedViewRefs();
     for (const templateRef of templateRefs) {
       const embeddedViewRef = this.vcr.createEmbeddedView(templateRef, { $implicit: pokemon });
       this.embeddedViewRefs.push(embeddedViewRef);
@@ -153,14 +163,5 @@ export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     // when pokemon input changes, I update the pokemon in ngTemplates
     this.renderDynamicTemplates(changes['pokemon'].currentValue);
-  }
-
-  ngOnDestroy() {
-    // destroy embeddedViewRefs to avoid memory leak
-    for (const viewRef of this.embeddedViewRefs) {
-      if (viewRef) {
-        viewRef.destroy();
-      }
-    }
   }
 }
