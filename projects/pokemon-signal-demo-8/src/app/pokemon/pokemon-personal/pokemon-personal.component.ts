@@ -1,6 +1,6 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { FlattenPokemon } from '../interfaces/pokemon.interface';
+import { DisplayPokemon } from '../interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-personal',
@@ -34,5 +34,5 @@ import { FlattenPokemon } from '../interfaces/pokemon.interface';
 })
 export class PokemonPersonalComponent {
   @Input()
-  pokemon!: FlattenPokemon;
+  pokemon!: DisplayPokemon;
 }

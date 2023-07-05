@@ -743,7 +743,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
             "outputPath": "dist/pokemon-signal-demo-8",
             "index": "projects/pokemon-signal-demo-8/src/index.html",

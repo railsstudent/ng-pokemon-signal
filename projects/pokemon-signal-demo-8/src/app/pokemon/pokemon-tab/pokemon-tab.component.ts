@@ -1,6 +1,6 @@
 import { NgFor } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef, inject, TemplateRef, EmbeddedViewRef } from '@angular/core';
-import { FlattenPokemon } from '../interfaces/pokemon.interface';
+import { DisplayPokemon, FlattenPokemon } from '../interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-tab',
@@ -104,7 +104,7 @@ import { FlattenPokemon } from '../interfaces/pokemon.interface';
 })
 export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
   @Input()
-  pokemon!: FlattenPokemon;
+  pokemon!: DisplayPokemon;
 
   // obtain reference to ng-container element
   @ViewChild('vcr', { static: true, read: ViewContainerRef })

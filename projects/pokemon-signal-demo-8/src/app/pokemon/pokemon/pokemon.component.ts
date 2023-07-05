@@ -1,27 +1,23 @@
-import { AsyncPipe, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { switchMap } from 'rxjs';
-import { getPokemonId, retrievePokemonFn } from '../helpers/pokemon.http';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PokemonControlsComponent } from '../pokemon-controls/pokemon-control.component';
 import { PokemonPersonalComponent } from '../pokemon-personal/pokemon-personal.component';
 import { PokemonTabComponent } from '../pokemon-tab/pokemon-tab.component';
+import { PokemonService } from '../services/pokemon.service';
 
 @Component({
   selector: 'app-pokemon',
   standalone: true,
-  imports: [AsyncPipe, NgIf, PokemonControlsComponent, PokemonPersonalComponent, PokemonTabComponent],
+  imports: [PokemonControlsComponent, PokemonPersonalComponent, PokemonTabComponent],
   template: `
-    <h1>
-      Display the first 100 pokemon images
-    </h1>
+    <h2>Display the first 100 pokemon images</h2>
     <div>
-      <ng-container *ngIf="pokemon$ | async as pokemon">
+      <ng-container>
         <div class="container">
-          <img [src]="pokemon.front_shiny" />
-          <img [src]="pokemon.back_shiny" />
+          <img [src]="pokemon().frontShiny" />
+          <img [src]="pokemon().backShiny" />
         </div>
-        <app-pokemon-personal [pokemon]="pokemon"></app-pokemon-personal>
-        <app-pokemon-tab [pokemon]="pokemon"></app-pokemon-tab>
+        <app-pokemon-personal [pokemon]="pokemon()"></app-pokemon-personal>
+        <app-pokemon-tab [pokemon]="pokemon()"></app-pokemon-tab>
       </ng-container>
     </div>
     <app-pokemon-controls></app-pokemon-controls>
@@ -47,6 +43,5 @@ import { PokemonTabComponent } from '../pokemon-tab/pokemon-tab.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonComponent {
-  retrievePokemon = retrievePokemonFn();
-  pokemon$ = getPokemonId().pipe(switchMap((id) => this.retrievePokemon(id)));
+  pokemon = inject(PokemonService).pokemon;
 }
