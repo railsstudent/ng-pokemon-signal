@@ -133,7 +133,7 @@ export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
     return [this.abilitiesRef];
   }
 
-  renderDyanmicTemplates(currentPokemon?: FlattenPokemon) {
+  renderDynamicTemplates(currentPokemon?: FlattenPokemon) {
     const templateRefs = this.getTemplateRefs();
     const pokemon = currentPokemon ? currentPokemon : this.pokemon;
 
@@ -147,12 +147,12 @@ export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.renderDyanmicTemplates();
+    this.renderDynamicTemplates();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     // when pokemon input changes, I update the pokemon in ngTemplates
-    this.renderDyanmicTemplates(changes['pokemon'].currentValue);
+    this.renderDynamicTemplates(changes['pokemon'].currentValue);
   }
 
   ngOnDestroy() {
