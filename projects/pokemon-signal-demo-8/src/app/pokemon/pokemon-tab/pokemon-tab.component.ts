@@ -1,6 +1,6 @@
 import { NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EmbeddedViewRef, Input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
-import { DisplayPokemon, FlattenPokemon } from '../interfaces/pokemon.interface';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EmbeddedViewRef, OnInit, TemplateRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import { PokemonService } from '../services/pokemon.service';
 
 @Component({
   selector: 'app-pokemon-tab',
@@ -102,9 +102,8 @@ import { DisplayPokemon, FlattenPokemon } from '../interfaces/pokemon.interface'
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonTabComponent implements OnInit, OnChanges {
-  @Input()
-  pokemon!: DisplayPokemon;
+export class PokemonTabComponent implements OnInit {
+  pokemon = inject(PokemonService).pokemon;
 
   // obtain reference to ng-container element
   @ViewChild('vcr', { static: true, read: ViewContainerRef })
@@ -142,14 +141,13 @@ export class PokemonTabComponent implements OnInit, OnChanges {
     }
   }
 
-  renderDynamicTemplates(currentPokemon?: FlattenPokemon) {
+  renderDynamicTemplates() {
     const templateRefs = this.getTemplateRefs();
-    const pokemon = currentPokemon ? currentPokemon : this.pokemon;
 
     this.vcr.clear();
     this.destroyEmbeddedViewRefs();
     for (const templateRef of templateRefs) {
-      const embeddedViewRef = this.vcr.createEmbeddedView(templateRef, { $implicit: pokemon });
+      const embeddedViewRef = this.vcr.createEmbeddedView(templateRef, { $implicit: this.pokemon() });
       this.embeddedViewRefs.push(embeddedViewRef);
       // after appending each embeddedViewRef to container, I trigger change detection cycle
       this.cdr.detectChanges();
@@ -158,10 +156,5 @@ export class PokemonTabComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.renderDynamicTemplates();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    // when pokemon input changes, I update the pokemon in ngTemplates
-    this.renderDynamicTemplates(changes['pokemon'].currentValue);
   }
 }
