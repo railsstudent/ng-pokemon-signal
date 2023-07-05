@@ -16,7 +16,7 @@ import { PokemonService } from '../services/pokemon.service';
           <img [src]="pokemon().frontShiny" />
           <img [src]="pokemon().backShiny" />
         </div>
-        <app-pokemon-personal [pokemon]="pokemon()"></app-pokemon-personal>
+        <app-pokemon-personal></app-pokemon-personal>
         <app-pokemon-tab [pokemon]="pokemon()"></app-pokemon-tab>
       </ng-container>
     </div>

@@ -141,7 +141,7 @@ export class PokemonTabComponent implements OnDestroy, OnInit, OnChanges {
     for (const templateRef of templateRefs) {
       const embeddedViewRef = this.vcr.createEmbeddedView(templateRef, { $implicit: pokemon });
       this.embeddedViewRefs.push(embeddedViewRef);
-      // after appending each embeddedViewRef to conta iner, I trigger change detection cycle
+      // after appending each embeddedViewRef to container, I trigger change detection cycle
       this.cdr.detectChanges();
     }
   }

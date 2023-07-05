@@ -1,21 +1,19 @@
-import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DisplayPokemon } from '../interfaces/pokemon.interface';
+import { NgFor, NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { PokemonService } from '../services/pokemon.service';
 
 @Component({
   selector: 'app-pokemon-personal',
   standalone: true,
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, NgFor],
   template:`
     <div class="pokemon-container" style="padding: 0.5rem;">
-      <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Id: ', value: pokemon.id }"></ng-container>
-      <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Name: ', value: pokemon.name }"></ng-container>
-      <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Height: ', value: pokemon.height }"></ng-container>
-      <ng-container *ngTemplateOutlet="details; context: { $implicit: 'Weight: ', value: pokemon.weight }"></ng-container>
+      <ng-container *ngTemplateOutlet="content; context: { $implicit: personalData }"></ng-container>
     </div>
-    <ng-template #details let-name let-value="value">
-      <label><span style="font-weight: bold; color: #aaa">{{ name }}</span>
-        <span>{{ value }}</span>
+    <ng-template #content let-personalData>
+      <label *ngFor="let data of personalData">
+        <span style="font-weight: bold; color: #aaa">{{ data.name }}</span>
+        <span>{{ data.value }}</span>
       </label>
     </ng-template>
   `,
@@ -33,6 +31,5 @@ import { DisplayPokemon } from '../interfaces/pokemon.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonPersonalComponent {
-  @Input()
-  pokemon!: DisplayPokemon;
+  personalData = inject(PokemonService).personalData;
 }
