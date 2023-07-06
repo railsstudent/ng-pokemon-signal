@@ -11,17 +11,17 @@ import { PokemonService } from '../services/pokemon.service';
       <div>
         <div>
           <input type="radio" id="all" name="selection" value="all"
-            checked (click)="selection = 'ALL'; renderDyanmicTemplates();">
+            checked (click)="selection = 'ALL'; renderDynamicTemplates();">
           <label for="all">All</label>
         </div>
         <div>
           <input type="radio" id="stats" name="selection" value="stats"
-            (click)="selection = 'STATISTICS'; renderDyanmicTemplates();">
+            (click)="selection = 'STATISTICS'; renderDynamicTemplates();">
           <label for="stats">Stats</label>
         </div>
         <div>
           <input type="radio" id="abilities" name="selection" value="abilities"
-            (click)="selection = 'ABILITIES'; renderDyanmicTemplates();">
+            (click)="selection = 'ABILITIES'; renderDynamicTemplates();">
           <label for="abilities">Abilities</label>
         </div>
       </div>

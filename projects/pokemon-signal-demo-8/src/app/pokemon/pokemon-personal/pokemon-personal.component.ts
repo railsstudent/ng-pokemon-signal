@@ -8,11 +8,11 @@ import { PokemonService } from '../services/pokemon.service';
   imports: [NgTemplateOutlet, NgFor],
   template:`
     <div class="pokemon-container" style="padding: 0.5rem;">
-      <ng-container *ngTemplateOutlet="content; context: { $implicit: personalData }"></ng-container>
+      <ng-container *ngTemplateOutlet="content; context: { $implicit: personalData() }"></ng-container>
     </div>
     <ng-template #content let-personalData>
       <label *ngFor="let data of personalData">
-        <span style="font-weight: bold; color: #aaa">{{ data.name }}</span>
+        <span style="font-weight: bold; color: #aaa">{{ data.text }}</span>
         <span>{{ data.value }}</span>
       </label>
     </ng-template>
