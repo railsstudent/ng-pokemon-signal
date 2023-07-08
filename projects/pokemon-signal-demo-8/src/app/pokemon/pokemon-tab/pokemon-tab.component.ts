@@ -1,6 +1,6 @@
 import { NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EmbeddedViewRef, OnInit, TemplateRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
-import { PokemonService } from '../services/pokemon.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EmbeddedViewRef, Input, OnChanges, OnInit, TemplateRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import { DisplayPokemon } from '../interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-tab',
@@ -38,7 +38,7 @@ import { PokemonService } from '../services/pokemon.service';
           </label>
           <label>
             <span style="font-weight: bold; color: #aaa">Base Stat: </span>
-            <span>{{ stat.base_stat }}</span>
+            <span>{{ stat.baseStat }}</span>
           </label>
           <label>
             <span style="font-weight: bold; color: #aaa">Effort: </span>
@@ -58,7 +58,7 @@ import { PokemonService } from '../services/pokemon.service';
           </label>
           <label>
             <span style="font-weight: bold; color: #aaa">Is hidden? </span>
-            <span>{{ ability.is_hidden ? 'Yes' : 'No' }}</span>
+            <span>{{ ability.isHidden ? 'Yes' : 'No' }}</span>
           </label>
           <label>&nbsp;</label>
         </div>
@@ -102,8 +102,9 @@ import { PokemonService } from '../services/pokemon.service';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonTabComponent implements OnInit {
-  pokemon = inject(PokemonService).pokemon;
+export class PokemonTabComponent implements OnInit, OnChanges {
+  @Input()
+  pokemon!: DisplayPokemon;
 
   // obtain reference to ng-container element
   @ViewChild('vcr', { static: true, read: ViewContainerRef })
@@ -147,7 +148,7 @@ export class PokemonTabComponent implements OnInit {
     this.vcr.clear();
     this.destroyEmbeddedViewRefs();
     for (const templateRef of templateRefs) {
-      const embeddedViewRef = this.vcr.createEmbeddedView(templateRef, { $implicit: this.pokemon() });
+      const embeddedViewRef = this.vcr.createEmbeddedView(templateRef, { $implicit: this.pokemon });
       this.embeddedViewRefs.push(embeddedViewRef);
       // after appending each embeddedViewRef to container, I trigger change detection cycle
       this.cdr.detectChanges();
@@ -155,6 +156,10 @@ export class PokemonTabComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.renderDynamicTemplates();
+  }
+
+  ngOnChanges(): void {
     this.renderDynamicTemplates();
   }
 }
