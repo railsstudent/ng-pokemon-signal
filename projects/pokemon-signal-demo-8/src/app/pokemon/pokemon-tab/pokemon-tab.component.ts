@@ -28,10 +28,10 @@ import { DisplayPokemon } from '../interfaces/pokemon.interface';
       <ng-container #vcr></ng-container>
     </div>
 
-    <ng-template #stats let-pokemon>
+    <ng-template #statsTemplate let-stats>
       <div>
         <p>Stats</p>
-        <div *ngFor="let stat of pokemon.stats" class="flex-container">
+        <div *ngFor="let stat of stats" class="flex-container">
           <label>
             <span style="font-weight: bold; color: #aaa">Name: </span>
             <span>{{ stat.name }}</span>
@@ -48,10 +48,10 @@ import { DisplayPokemon } from '../interfaces/pokemon.interface';
       </div>
     </ng-template>
 
-    <ng-template #abilities let-pokemon>
+    <ng-template #abilitiesTemplate let-abilities>
       <div>
         <p>Abilities</p>
-        <div *ngFor="let ability of pokemon.abilities" class="flex-container">
+        <div *ngFor="let ability of abilities" class="flex-container">
           <label>
             <span style="font-weight: bold; color: #aaa">Name: </span>
             <span>{{ ability.name }}</span>
@@ -111,11 +111,11 @@ export class PokemonTabComponent implements OnInit, OnChanges {
   vcr!: ViewContainerRef;
 
   // obtain reference ngTemplate named stats
-  @ViewChild('stats', { static: true, read: TemplateRef })
+  @ViewChild('statsTemplate', { static: true, read: TemplateRef })
   statsRef!: TemplateRef<any>;
 
   // obtain reference ngTemplate named abilities
-  @ViewChild('abilities', { static: true, read: TemplateRef })
+  @ViewChild('abilitiesTemplate', { static: true, read: TemplateRef })
   abilitiesRef!: TemplateRef<any>;
 
   selection: 'ALL' | 'STATISTICS' | 'ABILITIES' = 'ALL';
@@ -123,14 +123,28 @@ export class PokemonTabComponent implements OnInit, OnChanges {
 
   cdr = inject(ChangeDetectorRef);
 
-  private getTemplateRefs() {
-    if (this.selection === 'ALL') {
-      return [this.statsRef, this.abilitiesRef];
-    } else if (this.selection === 'STATISTICS') {
-      return [this.statsRef];
+  private getTemplateRefContexts() {
+    if (!this.statsRef || !this.abilitiesRef) {
+      return [];
     }
 
-    return [this.abilitiesRef];
+    const statsRefContext = {
+      ref: this.statsRef,
+      context: { $implicit: this.pokemon.stats }
+    }
+
+    const abilitiesRefContext = {
+      ref: this.abilitiesRef,
+      context: { $implicit: this.pokemon.abilities }
+    }
+
+    if (this.selection === 'ALL') {
+      return [statsRefContext, abilitiesRefContext];
+    } else if (this.selection === 'STATISTICS') {
+      return [statsRefContext];
+    }
+
+    return [abilitiesRefContext];
   }
 
   private destroyEmbeddedViewRefs() {
@@ -143,12 +157,12 @@ export class PokemonTabComponent implements OnInit, OnChanges {
   }
 
   renderDynamicTemplates() {
-    const templateRefs = this.getTemplateRefs();
+    const refContext = this.getTemplateRefContexts();
 
     this.vcr.clear();
     this.destroyEmbeddedViewRefs();
-    for (const templateRef of templateRefs) {
-      const embeddedViewRef = this.vcr.createEmbeddedView(templateRef, { $implicit: this.pokemon });
+    for (const { ref, context } of refContext) {
+      const embeddedViewRef = this.vcr.createEmbeddedView(ref, context);
       this.embeddedViewRefs.push(embeddedViewRef);
       // after appending each embeddedViewRef to container, I trigger change detection cycle
       this.cdr.detectChanges();
