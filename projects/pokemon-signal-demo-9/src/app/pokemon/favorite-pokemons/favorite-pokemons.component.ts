@@ -11,6 +11,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
       <li><a routerLink="/favorite-pokemons/39">Jigglypuff</a></li>
       <li><a routerLink="/favorite-pokemons/52">Meowth</a></li>
     </ul>
+    <p>Display my favorite Pokemons</p>
     <router-outlet></router-outlet>
   `,
   styles: [`
@@ -18,9 +19,16 @@ import { RouterLink, RouterOutlet } from '@angular/router';
       display: block;
     }
 
+    ul, p {
+      padding: 0.5rem;
+    }
+
     ul {
       display: flex;
-      padding: 0.5rem;
+    }
+
+    p {
+      font-size: 1.5rem;
     }
 
     li {
