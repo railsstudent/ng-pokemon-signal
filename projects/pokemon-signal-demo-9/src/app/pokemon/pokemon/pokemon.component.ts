@@ -11,14 +11,12 @@ import { PokemonService } from '../services/pokemon.service';
   template: `
     <h2>Display the first 100 pokemon images (lazy load standalone component)</h2>
     <div>
-      <ng-container>
-        <div class="container">
-          <img [src]="pokemon().frontShiny" />
-          <img [src]="pokemon().backShiny" />
-        </div>
-        <app-pokemon-personal></app-pokemon-personal>
-        <app-pokemon-tab></app-pokemon-tab>
-      </ng-container>
+      <div class="container">
+        <img [src]="pokemon().frontShiny" />
+        <img [src]="pokemon().backShiny" />
+      </div>
+      <app-pokemon-personal></app-pokemon-personal>
+      <app-pokemon-tab></app-pokemon-tab>
     </div>
     <app-pokemon-controls></app-pokemon-controls>
   `,
@@ -29,7 +27,7 @@ import { PokemonService } from '../services/pokemon.service';
       padding: 1rem;
     }
 
-    h1 {
+    h2 {
       margin-bottom: 20px;
     }
 

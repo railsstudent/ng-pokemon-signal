@@ -1,34 +1,48 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import { Component, Input, OnChanges, inject } from '@angular/core';
+import { PokemonPersonalComponent } from '../pokemon-personal/pokemon-personal.component';
+import { PokemonTabComponent } from '../pokemon-tab/pokemon-tab.component';
+import { PokemonService } from '../services/pokemon.service';
 
 @Component({
   selector: 'app-favorite-pokemon',
   standalone: true,
-  imports: [AsyncPipe],
+  imports: [PokemonPersonalComponent, PokemonTabComponent],
   template: `
-    <div>id: {{id$ | async}}</div>
+    <div>
+      <div class="container">
+        <img [src]="pokemon().frontShiny" />
+        <img [src]="pokemon().backShiny" />
+      </div>
+      <app-pokemon-personal></app-pokemon-personal>
+      <app-pokemon-tab></app-pokemon-tab>
+    </div>
   `,
   styles: [`
     :host {
       display: block;
+      font-size: 1.5rem;
     }
 
-    div {
-      margin: 0.5rem;
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 1rem;
     }
   `],
 })
-export class FavoritePokemonComponent implements OnInit {
-  route = inject(ActivatedRoute);
-  id$!: Observable<number>;
+export class FavoritePokemonComponent implements OnChanges {
+  @Input({ transform: (value: string) => +value })
+  id!: number;
 
-  ngOnInit(): void {
-    this.id$ = this.route.paramMap.pipe(
-      map((paramMap) => paramMap.get('id')),
-      map((id) => id ? +id : 25),  
-    );
+  pokemonService = inject(PokemonService);
+  pokemon = this.pokemonService.pokemon;
+
+  ngOnChanges(): void {
+    if (![25, 39, 52].includes(this.id)) {
+      this.id = 25;
+    }
+    
+    this.pokemonService.updatePokemonId(this.id);
   }
-
 }
