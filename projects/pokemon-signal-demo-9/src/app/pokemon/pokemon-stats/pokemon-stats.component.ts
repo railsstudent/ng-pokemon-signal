@@ -1,18 +1,15 @@
-import { NgFor, NgTemplateOutlet } from '@angular/common';
+import { NgFor } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PokemonService } from '../services/pokemon.service';
 
 @Component({
   selector: 'app-pokemon-stats',
   standalone: true,
-  imports: [NgFor, NgTemplateOutlet],
+  imports: [NgFor],
   template: `
     <div style="padding: 0.5rem;">
       <p>Stats</p>
-      <ng-container *ngTemplateOutlet="content; context: { $implicit: pokemon().stats }"></ng-container>
-    </div>
-    <ng-template #content let-stats>
-      <div *ngFor="let stat of stats" class="stats-container">
+      <div *ngFor="let stat of pokemon().stats" class="stats-container">
         <label>
           <span style="font-weight: bold; color: #aaa">Name: </span>
           <span>{{ stat.name }}</span>
@@ -26,7 +23,7 @@ import { PokemonService } from '../services/pokemon.service';
           <span>{{ stat.effort }}</span>
         </label>
       </div>
-    </ng-template>
+    </div>
   `,
   styles: [`
     :host {

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, inject } from '@angular/core';
+import { Component, Input, OnChanges, inject, numberAttribute } from '@angular/core';
 import { PokemonPersonalComponent } from '../pokemon-personal/pokemon-personal.component';
 import { PokemonTabComponent } from '../pokemon-tab/pokemon-tab.component';
 import { PokemonService } from '../services/pokemon.service';
@@ -32,7 +32,7 @@ import { PokemonService } from '../services/pokemon.service';
   `],
 })
 export class FavoritePokemonComponent implements OnChanges {
-  @Input({ transform: (value: string) => +value })
+  @Input({ transform: numberAttribute })
   id!: number;
 
   pokemonService = inject(PokemonService);
@@ -42,7 +42,7 @@ export class FavoritePokemonComponent implements OnChanges {
     if (![25, 39, 52].includes(this.id)) {
       this.id = 25;
     }
-    
+
     this.pokemonService.updatePokemonId(this.id);
   }
 }
