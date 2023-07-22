@@ -17,7 +17,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 `,
   styles: [`
     :host {
-      display:block;
+      display: block;
     }
 
     ul {

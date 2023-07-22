@@ -7,7 +7,7 @@ export const routes: Route[] = [
     },
     {
       path: 'favorite-pokemons',
-      loadComponent: () => import('./pokemon/favorite-pokemons/favorite-pokemons.component').then(c => c.FavoritePokemonsComponent)
+      loadChildren: () => import('./pokemon/favorite-pokemons/favorite-pokemons.routes').then(c => c.favoritePokemonsRoutes),
     },
     {
       path: '',
