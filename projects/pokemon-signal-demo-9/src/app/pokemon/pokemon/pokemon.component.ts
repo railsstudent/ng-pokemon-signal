@@ -9,9 +9,7 @@ import { PokemonService } from '../services/pokemon.service';
   standalone: true,
   imports: [PokemonControlsComponent, PokemonPersonalComponent, PokemonTabComponent],
   template: `
-    <h2>
-      Display the first 100 pokemon images (lazy load standalone component)
-    </h2>
+    <h2>Display the first 100 pokemon images (lazy load standalone component)</h2>
     <div>
       <ng-container>
         <div class="container">
