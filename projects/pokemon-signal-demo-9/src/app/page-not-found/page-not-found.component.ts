@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { map, shareReplay, tap, takeWhile, timer } from 'rxjs';
@@ -24,7 +24,8 @@ import { map, shareReplay, tap, takeWhile, timer } from 'rxjs';
       align-items: center;
       flex-direction: column;
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageNotFoundComponent implements OnInit {
   router = inject(Router);
