@@ -6,6 +6,10 @@ export const routes: Route[] = [
       loadComponent: () => import('./pokemon/pokemon/pokemon.component').then(c => c.PokemonComponent)
     },
     {
+      path: 'favorite-pokemons',
+      loadComponent: () => import('./pokemon/favorite-pokemons/favorite-pokemons.component').then(c => c.FavoritePokemonsComponent)
+    },
+    {
       path: '',
       pathMatch: 'full',
       loadComponent: () => import('./home/home.component').then(c => c.HomeComponent)
