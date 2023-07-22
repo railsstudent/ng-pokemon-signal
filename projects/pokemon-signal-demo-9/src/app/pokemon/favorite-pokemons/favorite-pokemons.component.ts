@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-favorite-pokemons',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './favorite-pokemons.component.html',
-  styleUrls: ['./favorite-pokemons.component.scss']
+  template: '<p>favorite-pokemons works!</p>',
+  styles: [`
+    :host {
+      display: block;
+    }
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FavoritePokemonsComponent {
 
