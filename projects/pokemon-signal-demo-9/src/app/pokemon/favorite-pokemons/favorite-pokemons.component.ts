@@ -6,12 +6,13 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   standalone: true,  
   imports: [RouterOutlet, RouterLink],
   template: `
+    <h2>Display my favorite Pokemons</h2>
     <ul>
-      <li><a routerLink="/favorite-pokemons/pikachu" [state]={ id: 25 }>Pikachu</a></li>
-      <li><a routerLink="/favorite-pokemons/39" [state]={ id: 39 }>Jigglypuff</a></li>
-      <li><a routerLink="/favorite-pokemons/52" [state]={ id: 52 }>Meowth</a></li>
+      <li><a routerLink="/favorite-pokemons/pikachu">Pikachu</a></li>
+      <li><a routerLink="/favorite-pokemons/jigglypuff">Jigglypuff</a></li>
+      <li><a routerLink="/favorite-pokemons/meowth">Meowth</a></li>
+      <li><a routerLink="/favorite-pokemons/snorlax">Snorlax</a></li>
     </ul>
-    <p>Display my favorite Pokemons</p>
     <router-outlet></router-outlet>
   `,
   styles: [`
@@ -19,7 +20,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
       display: block;
     }
 
-    ul, p {
+    ul, h2 {
       padding: 0.5rem;
     }
 
@@ -27,18 +28,12 @@ import { RouterLink, RouterOutlet } from '@angular/router';
       display: flex;
     }
 
-    p {
-      font-size: 1.5rem;
-    }
-
     li {
       font-size: 1rem;
-      margin-right: 0.25rem;
+      margin-right: 0.75rem;
       list-style-type: none;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FavoritePokemonsComponent {
-
-}
+export class FavoritePokemonsComponent {}

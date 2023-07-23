@@ -32,17 +32,16 @@ import { PokemonService } from '../services/pokemon.service';
   `],
 })
 export class FavoritePokemonComponent implements OnChanges {
-  @Input({ transform: numberAttribute })
+  @Input()
+  pokemonId!: number;
+
+  @Input({ transform: (value: unknown) => numberAttribute(value, 1) })
   id!: number;
 
   pokemonService = inject(PokemonService);
   pokemon = this.pokemonService.pokemon;
 
   ngOnChanges(): void {
-    if (![25, 39, 52].includes(this.id)) {
-      this.id = 25;
-    }
-
-    this.pokemonService.updatePokemonId(this.id);
+    this.pokemonService.updatePokemonId(this.pokemonId || this.id);
   }
 }

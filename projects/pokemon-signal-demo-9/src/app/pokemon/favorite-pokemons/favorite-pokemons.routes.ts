@@ -1,36 +1,46 @@
 import { Route } from '@angular/router';
 import { FavoritePokemonComponent } from '../favorite-pokemon/favorite-pokemon.component';
 import { FavoritePokemonsComponent } from './favorite-pokemons.component';
-import { favoritePokemonResolver } from './favorite-pokemon.resolver';
 
 export const favoritePokemonsRoutes: Route[] = [{
     path: '',
     component: FavoritePokemonsComponent,
     children: [
         { 
-            path: ':id', 
-            component: FavoritePokemonComponent  
-        },
-        { 
             path: 'pikachu', 
             component: FavoritePokemonComponent,
-            resolve: {
-                pokemon: favoritePokemonResolver,
-            }
+            data: {
+                pokemonId: 25
+            },
         },
         { 
             path: 'jigglypuff', 
             component: FavoritePokemonComponent,
-            resolve: {
-                pokemon: favoritePokemonResolver,
-            }
+            data: {
+                pokemonId: 39
+            },
         },
         { 
             path: 'meowth', 
             component: FavoritePokemonComponent,
-            resolve: {
-                pokemon: favoritePokemonResolver,
-            } 
+            data: {
+                pokemonId: 52
+            },
+        },
+        { 
+            path: 'snorlax', 
+            component: FavoritePokemonComponent,
+            data: {
+                pokemonId: 143
+            },
+        },
+        { 
+            path: ':id', 
+            component: FavoritePokemonComponent,
+        },
+        { 
+            path: '**', 
+            redirectTo: '', 
         },
     ], 
 }];
