@@ -7,9 +7,9 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   imports: [RouterOutlet, RouterLink],
   template: `
     <ul>
-      <li><a routerLink="/favorite-pokemons/25">Pokemon</a></li>
-      <li><a routerLink="/favorite-pokemons/39">Jigglypuff</a></li>
-      <li><a routerLink="/favorite-pokemons/52">Meowth</a></li>
+      <li><a routerLink="/favorite-pokemons/pikachu" [state]={ id: 25 }>Pikachu</a></li>
+      <li><a routerLink="/favorite-pokemons/39" [state]={ id: 39 }>Jigglypuff</a></li>
+      <li><a routerLink="/favorite-pokemons/52" [state]={ id: 52 }>Meowth</a></li>
     </ul>
     <p>Display my favorite Pokemons</p>
     <router-outlet></router-outlet>
