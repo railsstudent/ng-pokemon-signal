@@ -6,6 +6,27 @@ export const favoritePokemonsRoutes: Route[] = [{
     path: '',
     component: FavoritePokemonsComponent,
     children: [
-        { path: ':id', component: FavoritePokemonComponent  },
+        { 
+            path: ':id', 
+            component: FavoritePokemonComponent  
+        },
+        { 
+            path: 'pikachu', 
+            component: FavoritePokemonComponent,
+            resolve: {
+            }
+        },
+        { 
+            path: 'jigglypuff', 
+            component: FavoritePokemonComponent,
+            resolve: {
+            }
+        },
+        { 
+            path: 'meowth', 
+            component: FavoritePokemonComponent,
+            resolve: {
+            } 
+        },
     ], 
 }];
