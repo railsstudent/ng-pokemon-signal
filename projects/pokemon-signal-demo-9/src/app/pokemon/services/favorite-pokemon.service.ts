@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, map, switchMap } from 'rxjs';
-import { PokemonDelta } from '../interfaces/pokemon-control.interface';
+import { BehaviorSubject, filter, map, switchMap } from 'rxjs';
 import { Ability, DisplayPokemon, Pokemon, Statistics } from '../interfaces/pokemon.interface';
 
 const initialValue: DisplayPokemon = {
@@ -45,19 +44,20 @@ const pokemonTransformer = (pokemon: Pokemon): DisplayPokemon => {
 @Injectable({
   providedIn: 'root'
 })
-export class PokemonService {
-  private readonly pokemonIdSub = new BehaviorSubject(1);
+export class FavoritePokemonService {
   private readonly httpClient = inject(HttpClient);
 
-  private readonly pokemon$ =  this.pokemonIdSub
+  private readonly favoritePokemonSub = new BehaviorSubject('');
+  private readonly favoritePokemon$ =  this.favoritePokemonSub
     .pipe(
-      switchMap((id) => this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${id}`)),
+      filter((input) => !!input),
+      switchMap((idOrName) => this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${idOrName}`)),
       map((pokemon) => pokemonTransformer(pokemon))
     );
-  pokemon = toSignal(this.pokemon$, { initialValue });
+  favoritePokemon = toSignal(this.favoritePokemon$, { initialValue });
 
   personalData = computed(() => {
-    const { id, name, height, weight } = this.pokemon();
+    const { id, name, height, weight } = this.favoritePokemon();
     return [
       { text: 'Id: ', value: id },
       { text: 'Name: ', value: name },
@@ -66,13 +66,7 @@ export class PokemonService {
     ];
   });
 
-  updatePokemonId(input: PokemonDelta | number) {
-    if (typeof input === 'number') {
-      this.pokemonIdSub.next(input); 
-    } else {
-      const potentialId = this.pokemonIdSub.getValue() + input.delta;
-      const newId = Math.min(input.max, Math.max(input.min, potentialId));
-      this.pokemonIdSub.next(newId); 
-    }
+  updateFavoritePokemonSub(input:  string) {
+    this.favoritePokemonSub.next(input); 
   }
 }

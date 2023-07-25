@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, inject, numberAttribute } from '@angular/c
 import { PokemonPersonalComponent } from '../pokemon-personal/pokemon-personal.component';
 import { PokemonTabComponent } from '../pokemon-tab/pokemon-tab.component';
 import { PokemonService } from '../services/pokemon.service';
+import { FavoritePokemonService } from '../services/favorite-pokemon.service';
 
 @Component({
   selector: 'app-favorite-pokemon',
@@ -38,8 +39,8 @@ export class FavoritePokemonComponent implements OnChanges {
   @Input({ transform: (value: unknown) => typeof value === 'number' ? `${value}` : value })
   idOrName!: string;
 
-  pokemonService = inject(PokemonService);
-  pokemon = this.pokemonService.pokemon;
+  pokemonService = inject(FavoritePokemonService);
+  pokemon = this.pokemonService.favoritePokemon;
 
   ngOnChanges(): void {
     this.pokemonService.updateFavoritePokemonSub(this.pokemonId || this.idOrName);
