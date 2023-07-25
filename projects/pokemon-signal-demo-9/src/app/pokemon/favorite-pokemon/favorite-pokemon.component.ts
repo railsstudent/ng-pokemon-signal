@@ -32,16 +32,16 @@ import { PokemonService } from '../services/pokemon.service';
   `],
 })
 export class FavoritePokemonComponent implements OnChanges {
-  @Input()
-  pokemonId!: number;
+  @Input({ transform: (value: unknown) => typeof value === 'number' ? `${value}` : value })
+  pokemonId!: string;
 
-  @Input({ transform: (value: unknown) => numberAttribute(value, 1) })
-  id!: number;
+  @Input({ transform: (value: unknown) => typeof value === 'number' ? `${value}` : value })
+  idOrName!: string;
 
   pokemonService = inject(PokemonService);
   pokemon = this.pokemonService.pokemon;
 
   ngOnChanges(): void {
-    this.pokemonService.updatePokemonId(this.pokemonId || this.id);
+    this.pokemonService.updateFavoritePokemonSub(this.pokemonId || this.idOrName);
   }
 }

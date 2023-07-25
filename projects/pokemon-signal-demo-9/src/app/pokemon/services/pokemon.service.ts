@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, map, switchMap } from 'rxjs';
+import { BehaviorSubject, filter, map, switchMap } from 'rxjs';
 import { PokemonDelta } from '../interfaces/pokemon-control.interface';
 import { Ability, DisplayPokemon, Pokemon, Statistics } from '../interfaces/pokemon.interface';
 
@@ -56,6 +56,15 @@ export class PokemonService {
     );
   pokemon = toSignal(this.pokemon$, { initialValue });
 
+  private readonly favoritePokemonSub: BehaviorSubject<string> = new BehaviorSubject('');
+  private readonly favoritePokemon$ =  this.favoritePokemonSub
+    .pipe(
+      filter((input) => !!input),
+      switchMap((idOrName) => this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${idOrName}`)),
+      map((pokemon) => pokemonTransformer(pokemon))
+    );
+  favoritePokemon = toSignal(this.favoritePokemon$, { initialValue });
+
   personalData = computed(() => {
     const { id, name, height, weight } = this.pokemon();
     return [
@@ -74,5 +83,9 @@ export class PokemonService {
       const newId = Math.min(input.max, Math.max(input.min, potentialId));
       this.pokemonIdSub.next(newId); 
     }
+  }
+
+  updateFavoritePokemonSub(input:  string) {
+      this.favoritePokemonSub.next(input); 
   }
 }
