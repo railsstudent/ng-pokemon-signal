@@ -1,7 +1,6 @@
-import { Component, Input, OnChanges, inject, numberAttribute } from '@angular/core';
+import { Component, Input, OnChanges, inject } from '@angular/core';
 import { PokemonPersonalComponent } from '../pokemon-personal/pokemon-personal.component';
 import { PokemonTabComponent } from '../pokemon-tab/pokemon-tab.component';
-import { PokemonService } from '../services/pokemon.service';
 import { FavoritePokemonService } from '../services/favorite-pokemon.service';
 
 @Component({
