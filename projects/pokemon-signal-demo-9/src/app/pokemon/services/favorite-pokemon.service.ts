@@ -2,32 +2,22 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, filter, map, switchMap } from 'rxjs';
-import { Ability, DisplayPokemon, Pokemon, Statistics } from '../interfaces/pokemon.interface';
+import { Ability, DisplayFavoritePokemon, DisplayPokemon, Pokemon, Statistics } from '../interfaces/pokemon.interface';
 
-const initialValue: DisplayPokemon = {
+const initialValue: DisplayFavoritePokemon = {
   id: -1,
   name: '',
   height: -1,
   weight: -1,
   backShiny: '',
   frontShiny: '',
-  abilities: [],
-  stats: [],
+  backShinyFemale: '',
+  frontShinyFemale: '',
+  color: '',
 };
 
-const pokemonTransformer = (pokemon: Pokemon): DisplayPokemon => {
-  const { id, name, height, weight, sprites, abilities: a, stats: statistics } = pokemon;
-
-  const abilities: Ability[] = a.map(({ ability, is_hidden }) => ({
-    name: ability.name,
-    isHidden: is_hidden
-  }));
-
-  const stats: Statistics[] = statistics.map(({ stat, effort, base_stat }) => ({
-    name: stat.name,
-    effort,
-    baseStat: base_stat,
-  }));
+const pokemonTransformer = (pokemon: Pokemon): DisplayFavoritePokemon => {
+  const { id, name, height, weight, sprites } = pokemon;
 
   return {
     id,
@@ -36,8 +26,9 @@ const pokemonTransformer = (pokemon: Pokemon): DisplayPokemon => {
     weight,
     backShiny: sprites.back_shiny,
     frontShiny: sprites.front_shiny,
-    abilities,
-    stats,
+    backShinyFemale: sprites.back_shiny_female ?? '',
+    frontShinyFemale: sprites.front_shiny_female ?? '',
+    color: '',
   }
 }
 

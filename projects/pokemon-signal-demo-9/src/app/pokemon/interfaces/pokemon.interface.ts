@@ -11,6 +11,8 @@ export interface Pokemon {
   sprites: {
     back_shiny: string;
     front_shiny: string;
+    back_shiny_female: string | null;
+    front_shiny_female: string | null;
   },
   stats: {
     base_stat: number;
@@ -40,4 +42,10 @@ export type DisplayPokemon = Omit<Pokemon, 'sprites'| 'stats' | 'abilities'> & {
   frontShiny: string;
   stats: Statistics[];
   abilities: Ability[];
+}
+
+export type DisplayFavoritePokemon = Omit<DisplayPokemon, 'stats' | 'abilities'> & {
+  backShinyFemale: string;
+  frontShinyFemale: string;
+  color: string;
 }

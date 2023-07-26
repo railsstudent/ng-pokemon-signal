@@ -1,18 +1,19 @@
 import { Component, Input, OnChanges, inject } from '@angular/core';
-import { PokemonPersonalComponent } from '../pokemon-personal/pokemon-personal.component';
 import { FavoritePokemonService } from '../services/favorite-pokemon.service';
 
 @Component({
   selector: 'app-favorite-pokemon',
   standalone: true,
-  imports: [PokemonPersonalComponent],
+  imports: [],
   template: `
     <div>
       <div class="container">
         <img [src]="pokemon().frontShiny" />
         <img [src]="pokemon().backShiny" />
+        <img *ngIf="pokemon().frontShinyFemale" [src]="pokemon().frontShinyFemale />
+        <img *ngIf="pokemon().backShinyFemale" [src]="pokemon().backShinyFemale />
       </div>
-      <app-pokemon-personal></app-pokemon-personal>
+      <!-- <app-pokemon-personal></app-pokemon-personal> -->
     </div>
   `,
   styles: [`
