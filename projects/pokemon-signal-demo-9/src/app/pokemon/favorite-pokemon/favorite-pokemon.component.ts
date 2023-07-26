@@ -1,12 +1,11 @@
 import { Component, Input, OnChanges, inject } from '@angular/core';
 import { PokemonPersonalComponent } from '../pokemon-personal/pokemon-personal.component';
-import { PokemonTabComponent } from '../pokemon-tab/pokemon-tab.component';
 import { FavoritePokemonService } from '../services/favorite-pokemon.service';
 
 @Component({
   selector: 'app-favorite-pokemon',
   standalone: true,
-  imports: [PokemonPersonalComponent, PokemonTabComponent],
+  imports: [PokemonPersonalComponent],
   template: `
     <div>
       <div class="container">
@@ -14,7 +13,6 @@ import { FavoritePokemonService } from '../services/favorite-pokemon.service';
         <img [src]="pokemon().backShiny" />
       </div>
       <app-pokemon-personal></app-pokemon-personal>
-      <app-pokemon-tab></app-pokemon-tab>
     </div>
   `,
   styles: [`
