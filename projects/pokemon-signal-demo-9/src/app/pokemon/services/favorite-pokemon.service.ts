@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, catchError, concatAll, filter, map, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, map, of, switchMap } from 'rxjs';
 import { FavoritePokemon, PokemonSpecies } from '../interfaces/favorite-pokemon.interface';
 import { Pokemon } from '../interfaces/pokemon.interface';
 
@@ -43,7 +43,6 @@ export class FavoritePokemonService {
   private readonly favoritePokemonSub = new BehaviorSubject('');
   private readonly favoritePokemon$ =  this.favoritePokemonSub
     .pipe(
-      filter((idOrName) => !!idOrName),
       switchMap((idOrName) => this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${idOrName}`)),
       switchMap((pokemon) => 
         this.httpClient.get<PokemonSpecies>(`https://pokeapi.co/api/v2/pokemon-species/${pokemon.id}`)
@@ -60,12 +59,14 @@ export class FavoritePokemonService {
   favoritePokemon = toSignal(this.favoritePokemon$, { initialValue });
 
   personalData = computed(() => {
-    const { id, name, height, weight } = this.favoritePokemon();
+    const { id, name, height, weight, shape, color } = this.favoritePokemon();
     return [
       { text: 'Id: ', value: id },
       { text: 'Name: ', value: name },
       { text: 'Height: ', value: height },
       { text: 'Weight: ', value: weight },
+      { text: 'Color: ', value: color },
+      { text: 'Shape: ', value: shape },
     ];
   });
 

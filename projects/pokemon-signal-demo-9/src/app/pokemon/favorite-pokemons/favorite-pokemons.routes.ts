@@ -26,7 +26,7 @@ export const favoritePokemonsRoutes: Route[] = [{
     children: [
         ...childrenRoutes,
         { 
-            path: ':id', 
+            path: ':idOrName', 
             component: FavoritePokemonComponent,
         },
         { 

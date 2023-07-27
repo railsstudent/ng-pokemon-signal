@@ -1,20 +1,25 @@
 import { NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnChanges, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, computed, inject } from '@angular/core';
+import { FavoritePokemonPersonalComponent } from '../favorite-pokemon-personal/favorite-pokemon-personal.component';
 import { FavoritePokemonService } from '../services/favorite-pokemon.service';
 
 @Component({
   selector: 'app-favorite-pokemon',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgIf, FavoritePokemonPersonalComponent],
   template: `
     <div>
       <div class="container">
+        <p>Male version</p>
         <img [src]="pokemon().frontShiny" />
         <img [src]="pokemon().backShiny" />
+      </div>
+      <div class="container">
+        <p *ngIf="isShowFemaleImageText()">Female version</p>
         <img *ngIf="pokemon().frontShinyFemale" [src]="pokemon().frontShinyFemale" />
         <img *ngIf="pokemon().backShinyFemale" [src]="pokemon().backShinyFemale" />
       </div>
-      <p>{{ pokemon().color }}, {{ pokemon().shape }}</p>
+      <app-favorite-pokemon-personal></app-favorite-pokemon-personal>
     </div>
   `,
   styles: [`
@@ -41,6 +46,8 @@ export class FavoritePokemonComponent implements OnChanges {
 
   pokemonService = inject(FavoritePokemonService);
   pokemon = this.pokemonService.favoritePokemon;
+
+  isShowFemaleImageText = computed(() => !!this.pokemon().backShinyFemale || !!this.pokemon().frontShinyFemale);
 
   ngOnChanges(): void {
     this.pokemonService.updateFavoritePokemonSub(this.pokemonId || this.idOrName);
