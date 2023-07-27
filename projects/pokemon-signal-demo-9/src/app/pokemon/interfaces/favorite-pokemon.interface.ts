@@ -5,10 +5,12 @@ export type FavoritePokemon = Omit<DisplayPokemon, 'stats' | 'abilities'> & {
     frontShinyFemale: string;
     color: string;
     shape: string;
+    evolvesFromSpecies: string;
 }
 
 export interface PokemonSpecies {
     id: number;
     shape: Resource;
     color: Resource;
+    evolves_from_species: Resource;
 }

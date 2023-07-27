@@ -16,6 +16,7 @@ const initialValue: FavoritePokemon = {
   frontShinyFemale: '',
   color: '',
   shape: '',
+  evolvesFromSpecies: '',
 };
 
 const favoritePokemonTransformer = (pokemon: Pokemon, species: PokemonSpecies): FavoritePokemon => {
@@ -32,6 +33,7 @@ const favoritePokemonTransformer = (pokemon: Pokemon, species: PokemonSpecies): 
     frontShinyFemale: sprites.front_shiny_female ?? '',
     color: species.color.name,
     shape: species.shape.name,
+    evolvesFromSpecies: species?.evolves_from_species?.name || '',
   }
 }
 
@@ -59,15 +61,18 @@ export class FavoritePokemonService {
   favoritePokemon = toSignal(this.favoritePokemon$, { initialValue });
 
   personalData = computed(() => {
-    const { id, name, height, weight, shape, color } = this.favoritePokemon();
-    return [
+    const { id, name, height, weight, shape, color, evolvesFromSpecies } = this.favoritePokemon();
+    const defaultData = [
       { text: 'Id: ', value: id },
       { text: 'Name: ', value: name },
       { text: 'Height: ', value: height },
       { text: 'Weight: ', value: weight },
       { text: 'Color: ', value: color },
-      { text: 'Shape: ', value: shape },
+      { text: 'Shape: ', value: shape }
     ];
+
+    return evolvesFromSpecies ? 
+      [...defaultData, { text: 'Evolution: ', value: evolvesFromSpecies } ] : defaultData;
   });
 
   updateFavoritePokemonSub(inputIdOrName:  string) {
