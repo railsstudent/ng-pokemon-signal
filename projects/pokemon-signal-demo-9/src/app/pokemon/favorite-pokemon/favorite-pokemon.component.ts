@@ -1,19 +1,20 @@
-import { Component, Input, OnChanges, inject } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, inject } from '@angular/core';
 import { FavoritePokemonService } from '../services/favorite-pokemon.service';
 
 @Component({
   selector: 'app-favorite-pokemon',
   standalone: true,
-  imports: [],
+  imports: [NgIf],
   template: `
     <div>
       <div class="container">
         <img [src]="pokemon().frontShiny" />
         <img [src]="pokemon().backShiny" />
-        <img *ngIf="pokemon().frontShinyFemale" [src]="pokemon().frontShinyFemale />
-        <img *ngIf="pokemon().backShinyFemale" [src]="pokemon().backShinyFemale />
+        <img *ngIf="pokemon().frontShinyFemale" [src]="pokemon().frontShinyFemale" />
+        <img *ngIf="pokemon().backShinyFemale" [src]="pokemon().backShinyFemale" />
       </div>
-      <!-- <app-pokemon-personal></app-pokemon-personal> -->
+      <p>{{ pokemon().color }}, {{ pokemon().shape }}</p>
     </div>
   `,
   styles: [`
@@ -29,6 +30,7 @@ import { FavoritePokemonService } from '../services/favorite-pokemon.service';
       padding: 1rem;
     }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FavoritePokemonComponent implements OnChanges {
   @Input({ transform: (value: unknown) => typeof value === 'number' ? `${value}` : value })
