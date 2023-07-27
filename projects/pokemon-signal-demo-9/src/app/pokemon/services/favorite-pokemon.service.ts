@@ -72,7 +72,7 @@ export class FavoritePokemonService {
     ];
 
     return evolvesFromSpecies ? 
-      [...defaultData, { text: 'Evolution: ', value: evolvesFromSpecies } ] : defaultData;
+      [...defaultData, { text: 'Evolve From: ', value: evolvesFromSpecies } ] : defaultData;
   });
 
   updateFavoritePokemonSub(inputIdOrName:  string) {
