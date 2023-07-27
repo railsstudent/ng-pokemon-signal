@@ -1,0 +1,14 @@
+import { DisplayPokemon, Resource } from './pokemon.interface';
+
+export type FavoritePokemon = Omit<DisplayPokemon, 'stats' | 'abilities'> & {
+    backShinyFemale: string;
+    frontShinyFemale: string;
+    color: string;
+    shape: string;
+}
+
+export interface PokemonSpecies {
+    id: number;
+    shape: Resource;
+    color: Resource;
+}

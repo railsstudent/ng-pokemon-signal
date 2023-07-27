@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, filter, map, switchMap } from 'rxjs';
-import { Ability, DisplayFavoritePokemon, DisplayPokemon, Pokemon, Statistics } from '../interfaces/pokemon.interface';
+import { BehaviorSubject, catchError, concatAll, filter, map, of, switchMap } from 'rxjs';
+import { FavoritePokemon, PokemonSpecies } from '../interfaces/favorite-pokemon.interface';
+import { Pokemon } from '../interfaces/pokemon.interface';
 
-const initialValue: DisplayFavoritePokemon = {
+const initialValue: FavoritePokemon = {
   id: -1,
   name: '',
   height: -1,
@@ -14,9 +15,10 @@ const initialValue: DisplayFavoritePokemon = {
   backShinyFemale: '',
   frontShinyFemale: '',
   color: '',
+  shape: '',
 };
 
-const pokemonTransformer = (pokemon: Pokemon): DisplayFavoritePokemon => {
+const favoritePokemonTransformer = (pokemon: Pokemon, species: PokemonSpecies): FavoritePokemon => {
   const { id, name, height, weight, sprites } = pokemon;
 
   return {
@@ -28,7 +30,8 @@ const pokemonTransformer = (pokemon: Pokemon): DisplayFavoritePokemon => {
     frontShiny: sprites.front_shiny,
     backShinyFemale: sprites.back_shiny_female ?? '',
     frontShinyFemale: sprites.front_shiny_female ?? '',
-    color: '',
+    color: species.color.name,
+    shape: species.shape.name,
   }
 }
 
@@ -37,14 +40,23 @@ const pokemonTransformer = (pokemon: Pokemon): DisplayFavoritePokemon => {
 })
 export class FavoritePokemonService {
   private readonly httpClient = inject(HttpClient);
-
   private readonly favoritePokemonSub = new BehaviorSubject('');
   private readonly favoritePokemon$ =  this.favoritePokemonSub
     .pipe(
-      filter((input) => !!input),
+      filter((idOrName) => !!idOrName),
       switchMap((idOrName) => this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${idOrName}`)),
-      map((pokemon) => pokemonTransformer(pokemon))
+      switchMap((pokemon) => 
+        this.httpClient.get<PokemonSpecies>(`https://pokeapi.co/api/v2/pokemon-species/${pokemon.id}`)
+          .pipe(
+            map((species) => favoritePokemonTransformer(pokemon, species)),
+            catchError((err) => {
+              console.error(err);
+              return of(initialValue);
+            }),
+          )
+      ),
     );
+    
   favoritePokemon = toSignal(this.favoritePokemon$, { initialValue });
 
   personalData = computed(() => {
@@ -57,7 +69,7 @@ export class FavoritePokemonService {
     ];
   });
 
-  updateFavoritePokemonSub(input:  string) {
-    this.favoritePokemonSub.next(input); 
+  updateFavoritePokemonSub(inputIdOrName:  string) {
+    this.favoritePokemonSub.next(inputIdOrName); 
   }
 }

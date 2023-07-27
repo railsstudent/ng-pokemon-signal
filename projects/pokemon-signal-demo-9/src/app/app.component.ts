@@ -11,7 +11,6 @@ import { RouterLink, RouterOutlet } from '@angular/router';
       <li><a routerLink="/" routerLinkActive="active">Home</a></li>
       <li><a routerLink="/pokemon" routerLinkActive="active">Show Pokemon</a></li>
       <li><a routerLink="/favorite-pokemons" routerLinkActive="active">Favorite Pokemons</a></li>
-      <li><a routerLink="/bad" routerLinkActive="active">Bad route</a></li>
     </ul>
     <router-outlet></router-outlet>
 `,

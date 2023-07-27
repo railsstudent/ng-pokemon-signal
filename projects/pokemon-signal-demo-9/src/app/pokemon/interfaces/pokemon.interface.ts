@@ -24,6 +24,7 @@ export interface Pokemon {
     slot: number;
     is_hidden: boolean;
   }[]
+  species: Resource;
 }
 
 export interface Statistics {
@@ -37,15 +38,9 @@ export interface Ability {
   isHidden: boolean;
 };
 
-export type DisplayPokemon = Omit<Pokemon, 'sprites'| 'stats' | 'abilities'> & {
+export type DisplayPokemon = Omit<Pokemon, 'sprites'| 'stats' | 'abilities' | 'species'> & {
   backShiny: string;
   frontShiny: string;
   stats: Statistics[];
   abilities: Ability[];
-}
-
-export type DisplayFavoritePokemon = Omit<DisplayPokemon, 'stats' | 'abilities'> & {
-  backShinyFemale: string;
-  frontShinyFemale: string;
-  color: string;
 }
