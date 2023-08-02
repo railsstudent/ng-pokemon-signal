@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-favorite-pokemons',
+  selector: 'app-favorite-pokemon-list',
   standalone: true,  
   imports: [RouterOutlet, RouterLink],
   template: `
@@ -10,7 +10,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
     <ul>
       <li><a routerLink="/favorite-pokemons/pikachu">Pikachu</a></li>
       <li><a routerLink="/favorite-pokemons/jigglypuff">Jigglypuff</a></li>
-      <li><a routerLink="/favorite-pokemons/meowth">Meowth</a></li>
+      <li><a routerLink="/favorite-pokemons/seaking">Seaking</a></li>
       <li><a routerLink="/favorite-pokemons/snorlax">Snorlax</a></li>
     </ul>
     <router-outlet></router-outlet>
@@ -36,4 +36,4 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FavoritePokemonsComponent {}
+export class FavoritePokemonListComponent {}

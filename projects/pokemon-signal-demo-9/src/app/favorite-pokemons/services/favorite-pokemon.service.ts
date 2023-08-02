@@ -31,8 +31,8 @@ const favoritePokemonTransformer = (pokemon: Pokemon, species: PokemonSpecies): 
     frontShiny: sprites.front_shiny,
     backShinyFemale: sprites.back_shiny_female ?? '',
     frontShinyFemale: sprites.front_shiny_female ?? '',
-    color: species.color.name,
-    shape: species.shape.name,
+    color: species?.color?.name ?? '',
+    shape: species?.shape?.name ?? '',
     evolvesFromSpecies: species?.evolves_from_species?.name || '',
   }
 }

@@ -9,15 +9,15 @@ import { FavoritePokemonService } from '../services/favorite-pokemon.service';
   imports: [NgIf, FavoritePokemonPersonalComponent],
   template: `
     <div>
-      <div class="container">
+      <div class="container" *ngIf="isShowMaleImageText()">
         <p>Male version</p>
         <img [src]="pokemon().frontShiny" />
         <img [src]="pokemon().backShiny" />
       </div>
-      <div class="container">
-        <p *ngIf="isShowFemaleImageText()">Female version</p>
-        <img *ngIf="pokemon().frontShinyFemale" [src]="pokemon().frontShinyFemale" />
-        <img *ngIf="pokemon().backShinyFemale" [src]="pokemon().backShinyFemale" />
+      <div class="container" *ngIf="isShowFemaleImageText()">
+        <p>Female version</p>
+        <img [src]="pokemon().frontShinyFemale" />
+        <img [src]="pokemon().backShinyFemale" />
       </div>
       <app-favorite-pokemon-personal></app-favorite-pokemon-personal>
     </div>
@@ -48,6 +48,7 @@ export class FavoritePokemonComponent implements OnChanges {
   pokemon = this.pokemonService.favoritePokemon;
 
   isShowFemaleImageText = computed(() => !!this.pokemon().backShinyFemale || !!this.pokemon().frontShinyFemale);
+  isShowMaleImageText = computed(() => !!this.pokemon().backShiny || !!this.pokemon().frontShiny);
 
   ngOnChanges(): void {
     this.pokemonService.updateFavoritePokemonSub(this.pokemonId || this.idOrName);

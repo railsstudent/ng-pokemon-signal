@@ -1,12 +1,11 @@
 import { Route } from '@angular/router';
-import { FavoritePokemonComponent } from '../favorite-pokemon/favorite-pokemon.component';
-import { FavoritePokemonsComponent } from './favorite-pokemons.component';
-
+import { FavoritePokemonListComponent } from './favorite-pokemon-list/favorite-pokemon-list.component';
+import { FavoritePokemonComponent } from './favorite-pokemon/favorite-pokemon.component';
 
 const favoritePokemons = [
     { path: 'pikachu', pokemonId: 25 },
     { path: 'jigglypuff', pokemonId: 39 },
-    { path: 'meowth', pokemonId: 52 },
+    { path: 'seaking', pokemonId: 119 },
     { path: 'snorlax', pokemonId: 143 },
 ]
 
@@ -22,7 +21,7 @@ const childrenRoutes = favoritePokemons.map(({ path, pokemonId }) => {
 
 export const favoritePokemonsRoutes: Route[] = [{
     path: '',
-    component: FavoritePokemonsComponent,
+    component: FavoritePokemonListComponent,
     children: [
         ...childrenRoutes,
         { 
