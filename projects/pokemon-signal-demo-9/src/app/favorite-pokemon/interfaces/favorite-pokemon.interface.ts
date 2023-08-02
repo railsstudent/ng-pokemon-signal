@@ -1,4 +1,4 @@
-import { DisplayPokemon, Resource } from './pokemon.interface';
+import { DisplayPokemon, Resource } from '../../pokemon/interfaces/pokemon.interface';
 
 export type FavoritePokemon = Omit<DisplayPokemon, 'stats' | 'abilities'> & {
     backShinyFemale: string;

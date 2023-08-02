@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, catchError, map, of, switchMap } from 'rxjs';
+import { Pokemon } from '../../pokemon/interfaces/pokemon.interface';
 import { FavoritePokemon, PokemonSpecies } from '../interfaces/favorite-pokemon.interface';
-import { Pokemon } from '../interfaces/pokemon.interface';
 
 const initialValue: FavoritePokemon = {
   id: -1,
