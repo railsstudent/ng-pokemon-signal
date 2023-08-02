@@ -1,16 +1,22 @@
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FavoritePokemonService } from '../services/favorite-pokemon.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-favorite-pokemon-personal',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor, NgIf, RouterLink],
   template:`
     <div class="pokemon-container" style="padding: 0.5rem;">
-      <label *ngFor="let data of personalData()">
-        <span style="font-weight: bold; color: #aaa">{{ data.text }}</span>
+      <label *ngFor="let data of personalData().physicalAttributes">
+        <span>{{ data.text }}</span>
         <span>{{ data.value }}</span>
+      </label>
+
+      <label *ngIf="personalData().evolveFrom" class="evolved">
+        <span>Evolve from: </span>
+        <a [routerLink]="['/favorite-pokemons', personalData().evolveFrom ]">{{ personalData().evolveFrom }}</a>
       </label>
     </div>
   `,
@@ -27,7 +33,16 @@ import { FavoritePokemonService } from '../services/favorite-pokemon.service';
 
     .pokemon-container > label {
       flex-basis: calc(100% / 3);
-    }    
+    }
+    
+    .pokemon-container > label > span:first-child {
+      font-weight: bold; 
+      color: #aaa;
+    }
+
+    .pokemon-container > label.evolved {
+      flex-basis: 100%;
+    }  
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

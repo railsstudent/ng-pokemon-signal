@@ -42,6 +42,7 @@ const favoritePokemonTransformer = (pokemon: Pokemon, species: PokemonSpecies): 
 })
 export class FavoritePokemonService {
   private readonly httpClient = inject(HttpClient);
+  
   private readonly favoritePokemonSub = new BehaviorSubject('');
   private readonly favoritePokemon$ =  this.favoritePokemonSub
     .pipe(
@@ -62,17 +63,17 @@ export class FavoritePokemonService {
 
   personalData = computed(() => {
     const { id, name, height, weight, shape, color, evolvesFromSpecies } = this.favoritePokemon();
-    const defaultData = [
-      { text: 'Id: ', value: id },
-      { text: 'Name: ', value: name },
-      { text: 'Height: ', value: height },
-      { text: 'Weight: ', value: weight },
-      { text: 'Color: ', value: color },
-      { text: 'Shape: ', value: shape }
-    ];
-
-    return evolvesFromSpecies ? 
-      [...defaultData, { text: 'Evolve From: ', value: evolvesFromSpecies } ] : defaultData;
+    return {
+      physicalAttributes: [
+        { text: 'Id: ', value: id },
+        { text: 'Name: ', value: name },
+        { text: 'Height: ', value: height },
+        { text: 'Weight: ', value: weight },
+        { text: 'Color: ', value: color },
+        { text: 'Shape: ', value: shape }
+      ],
+      evolveFrom: evolvesFromSpecies,
+    };
   });
 
   updateFavoritePokemonSub(inputIdOrName:  string) {
