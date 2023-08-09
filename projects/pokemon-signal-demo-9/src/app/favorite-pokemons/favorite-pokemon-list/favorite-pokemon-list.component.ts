@@ -8,7 +8,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   template: `
     <h2>Display my favorite Pokemons</h2>
     <ul>
-      <li><a routerLink="/favorite-pokemons/pikachu", [queryParams]="{ favorite: true }">Pikachu</a></li>
+      <li><a routerLink="/favorite-pokemons/pikachu" [queryParams]="{ favorite: true }">Pikachu</a></li>
       <li><a routerLink="/favorite-pokemons/jigglypuff" [queryParams]="{ favorite: true }">Jigglypuff</a></li>
       <li><a routerLink="/favorite-pokemons/seaking" [queryParams]="{ favorite: false }">Seaking</a></li>
       <li><a routerLink="/favorite-pokemons/snorlax" [queryParams]="{ favorite: false }">Snorlax</a></li>

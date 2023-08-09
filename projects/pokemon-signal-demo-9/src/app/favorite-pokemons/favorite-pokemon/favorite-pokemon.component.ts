@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnChanges, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, booleanAttribute, computed, inject } from '@angular/core';
 import { FavoritePokemonPersonalComponent } from '../favorite-pokemon-personal/favorite-pokemon-personal.component';
 import { FavoritePokemonService } from '../services/favorite-pokemon.service';
 
@@ -19,7 +19,7 @@ import { FavoritePokemonService } from '../services/favorite-pokemon.service';
         <img [src]="pokemon().frontShinyFemale" />
         <img [src]="pokemon().backShinyFemale" />
       </div>
-      <app-favorite-pokemon-personal></app-favorite-pokemon-personal>
+      <app-favorite-pokemon-personal [isFavorite]="isFavorite"></app-favorite-pokemon-personal>
     </div>
   `,
   styles: [`
@@ -43,6 +43,9 @@ export class FavoritePokemonComponent implements OnChanges {
 
   @Input({ transform: (value: unknown) => typeof value === 'number' ? `${value}` : value })
   idOrName!: string;
+
+  @Input({ alias: 'favorite', transform: booleanAttribute })
+  isFavorite!: boolean;
 
   pokemonService = inject(FavoritePokemonService);
   pokemon = this.pokemonService.favoritePokemon;
