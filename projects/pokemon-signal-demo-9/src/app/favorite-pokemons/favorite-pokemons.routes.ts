@@ -9,13 +9,13 @@ const favoritePokemons = [
     { path: 'snorlax', pokemonId: 143 },
 ]
 
-const childrenRoutes = favoritePokemons.map(({ path, pokemonId }) => {
+const childrenRoutes: Route[] = favoritePokemons.map(({ path, pokemonId }) => {
     return {
         path,
         component: FavoritePokemonComponent,
         data: {
             pokemonId,
-        },
+        }
     }
 });
 
