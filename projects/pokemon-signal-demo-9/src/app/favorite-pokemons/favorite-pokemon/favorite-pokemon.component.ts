@@ -1,29 +1,28 @@
 import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnChanges, booleanAttribute, computed, inject } from '@angular/core';
+import { FavoritePokemonImagesComponent } from '../favorite-pokemon-images/favorite-pokemon-images.component';
 import { FavoritePokemonPersonalComponent } from '../favorite-pokemon-personal/favorite-pokemon-personal.component';
 import { FavoritePokemonService } from '../services/favorite-pokemon.service';
 
 @Component({
   selector: 'app-favorite-pokemon',
   standalone: true,
-  imports: [NgIf, FavoritePokemonPersonalComponent],
+  imports: [NgIf, FavoritePokemonPersonalComponent, FavoritePokemonImagesComponent],
   template: `
     <div>
       <div style="display: flex; justify-content: center;">
-        <div class="container" *ngIf="isShowMaleImageText()">
-          <p>Male version</p>
-          <div>
-            <img [src]="pokemon().frontShiny" />
-            <img [src]="pokemon().backShiny" />
-          </div>
-        </div>
-        <div class="container" *ngIf="isShowFemaleImageText()">
-          <p>Female version</p>
-          <div>
-            <img [src]="pokemon().frontShinyFemale" />
-            <img [src]="pokemon().backShinyFemale" />
-          </div>
-        </div>
+        <app-favorite-pokemon-images *ngIf="isShowMaleImageText()" 
+          [description]="'Male version'"
+          [frontImage]="pokemon().frontShiny"
+          [backImage]="pokemon().backShiny"
+        >
+        </app-favorite-pokemon-images>
+        <app-favorite-pokemon-images *ngIf="isShowFemaleImageText()" 
+          [description]="'Female version'"
+          [frontImage]="pokemon().frontShinyFemale"
+          [backImage]="pokemon().backShinyFemale"
+        >
+        </app-favorite-pokemon-images>
       </div>
       <app-favorite-pokemon-personal [isMainCharacter]="isMainCharacter"></app-favorite-pokemon-personal>
     </div>
@@ -32,17 +31,6 @@ import { FavoritePokemonService } from '../services/favorite-pokemon.service';
     :host {
       display: block;
       font-size: 1.5rem;
-    }
-
-    p {
-      text-align: center;
-      font-size: 1rem;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      padding: 1rem;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
