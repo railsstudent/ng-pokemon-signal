@@ -27,6 +27,12 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
       flex-direction: column;
       padding: 1rem;
     }
+
+    .container > div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
