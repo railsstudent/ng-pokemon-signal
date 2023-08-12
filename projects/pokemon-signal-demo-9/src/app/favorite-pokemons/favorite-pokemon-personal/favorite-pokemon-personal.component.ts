@@ -8,7 +8,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [NgFor, NgIf, RouterLink],
   template:`
-    <p>{{ this.isFavorite ?  'My favorite pokemon' : 'Not my favorite pokemon' }}</p>
+    <p>{{ this.isMainCharacter ?  'Main character' : 'Supporting cast' }}</p>
     <div class="pokemon-container">
       <label *ngFor="let data of personalData().physicalAttributes">
         <span>{{ data.text }}</span>
@@ -55,7 +55,7 @@ import { RouterLink } from '@angular/router';
 })
 export class FavoritePokemonPersonalComponent {
   @Input({ required: true })
-  isFavorite!: boolean;
+  isMainCharacter!: boolean;
 
   personalData = inject(FavoritePokemonService).personalData;
 }

@@ -19,7 +19,7 @@ import { FavoritePokemonService } from '../services/favorite-pokemon.service';
         <img [src]="pokemon().frontShinyFemale" />
         <img [src]="pokemon().backShinyFemale" />
       </div>
-      <app-favorite-pokemon-personal [isFavorite]="isFavorite"></app-favorite-pokemon-personal>
+      <app-favorite-pokemon-personal [isMainCharacter]="isMainCharacter"></app-favorite-pokemon-personal>
     </div>
   `,
   styles: [`
@@ -44,8 +44,8 @@ export class FavoritePokemonComponent implements OnChanges {
   @Input({ transform: (value: unknown) => typeof value === 'number' ? `${value}` : value })
   idOrName!: string;
 
-  @Input({ alias: 'favorite', transform: booleanAttribute })
-  isFavorite!: boolean;
+  @Input({ transform: booleanAttribute })
+  isMainCharacter!: boolean;
 
   pokemonService = inject(FavoritePokemonService);
   pokemon = this.pokemonService.favoritePokemon;
