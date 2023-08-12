@@ -12,15 +12,11 @@ import { FavoritePokemonService } from '../services/favorite-pokemon.service';
     <div>
       <div style="display: flex; justify-content: center;">
         <app-favorite-pokemon-images *ngIf="isShowMaleImageText()" 
-          [description]="'Male version'"
-          [frontImage]="pokemon().frontShiny"
-          [backImage]="pokemon().backShiny"
+          [description]="'Male version'" [frontImage]="pokemon().frontShiny" [backImage]="pokemon().backShiny"
         >
         </app-favorite-pokemon-images>
         <app-favorite-pokemon-images *ngIf="isShowFemaleImageText()" 
-          [description]="'Female version'"
-          [frontImage]="pokemon().frontShinyFemale"
-          [backImage]="pokemon().backShinyFemale"
+          [description]="'Female version'" [frontImage]="pokemon().frontShinyFemale" [backImage]="pokemon().backShinyFemale"
         >
         </app-favorite-pokemon-images>
       </div>
