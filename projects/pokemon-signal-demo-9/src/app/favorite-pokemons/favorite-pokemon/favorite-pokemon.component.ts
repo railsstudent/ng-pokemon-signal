@@ -9,15 +9,21 @@ import { FavoritePokemonService } from '../services/favorite-pokemon.service';
   imports: [NgIf, FavoritePokemonPersonalComponent],
   template: `
     <div>
-      <div class="container" *ngIf="isShowMaleImageText()">
-        <p>Male version</p>
-        <img [src]="pokemon().frontShiny" />
-        <img [src]="pokemon().backShiny" />
-      </div>
-      <div class="container" *ngIf="isShowFemaleImageText()">
-        <p>Female version</p>
-        <img [src]="pokemon().frontShinyFemale" />
-        <img [src]="pokemon().backShinyFemale" />
+      <div style="display: flex; justify-content: center;">
+        <div class="container" *ngIf="isShowMaleImageText()">
+          <p>Male version</p>
+          <div>
+            <img [src]="pokemon().frontShiny" />
+            <img [src]="pokemon().backShiny" />
+          </div>
+        </div>
+        <div class="container" *ngIf="isShowFemaleImageText()">
+          <p>Female version</p>
+          <div>
+            <img [src]="pokemon().frontShinyFemale" />
+            <img [src]="pokemon().backShinyFemale" />
+          </div>
+        </div>
       </div>
       <app-favorite-pokemon-personal [isMainCharacter]="isMainCharacter"></app-favorite-pokemon-personal>
     </div>
@@ -28,10 +34,14 @@ import { FavoritePokemonService } from '../services/favorite-pokemon.service';
       font-size: 1.5rem;
     }
 
+    p {
+      text-align: center;
+      font-size: 1rem;
+    }
+
     .container {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-direction: column;
       padding: 1rem;
     }
   `],
