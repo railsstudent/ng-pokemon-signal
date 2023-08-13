@@ -1,7 +1,8 @@
 import { NgComponentOutlet, NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PokemonAbilitiesComponent } from '../pokemon-abilities/pokemon-abilities.component';
 import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component';
+import { PokemonService } from '../services/pokemon.service';
 
 @Component({
   selector: 'app-pokemon-tab',
@@ -30,7 +31,7 @@ import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component'
       </div>
     </div>
     <ng-container *ngFor="let componentType of dynamicComponents">
-      <ng-container *ngComponentOutlet="componentType"></ng-container>
+      <ng-container *ngComponentOutlet="componentType; inputs: { pokemon: pokemon() }"></ng-container>
     </ng-container>
   `,
   styles: [`
@@ -57,6 +58,7 @@ export class PokemonTabComponent {
   }
 
   dynamicComponents = this.componentMap['all'];
+  pokemon = inject(PokemonService).pokemon;
 
   selectComponents(type: string) {
     const components = this.componentMap[type];

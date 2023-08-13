@@ -1,6 +1,6 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { PokemonService } from '../services/pokemon.service';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { DisplayPokemon } from '../interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-abilities',
@@ -9,7 +9,7 @@ import { PokemonService } from '../services/pokemon.service';
   template: `
     <div style="padding: 0.5rem;">
       <p>Abilities</p>
-      <ng-container *ngTemplateOutlet="content; context: { $implicit: pokemon().abilities }"></ng-container>
+      <ng-container *ngTemplateOutlet="content; context: { $implicit: pokemon.abilities }"></ng-container>
     </div>
     <ng-template #content let-abilities>
       <div *ngFor="let ability of abilities" class="abilities-container">
@@ -43,5 +43,6 @@ import { PokemonService } from '../services/pokemon.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonAbilitiesComponent {
-  pokemon = inject(PokemonService).pokemon;
+  @Input({ required: true })
+  pokemon!: DisplayPokemon;
 }
