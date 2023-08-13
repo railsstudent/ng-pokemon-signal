@@ -1,18 +1,15 @@
-import { NgFor, NgTemplateOutlet } from '@angular/common';
+import { NgFor } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DisplayPokemon } from '../interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-abilities',
   standalone: true,
-  imports: [NgFor, NgTemplateOutlet],
+  imports: [NgFor],
   template: `
     <div style="padding: 0.5rem;">
       <p>Abilities</p>
-      <ng-container *ngTemplateOutlet="content; context: { $implicit: pokemon.abilities }"></ng-container>
-    </div>
-    <ng-template #content let-abilities>
-      <div *ngFor="let ability of abilities" class="abilities-container">
+      <div *ngFor="let ability of pokemon.abilities" class="abilities-container">
         <label>
           <span style="font-weight: bold; color: #aaa">Name: </span>
           <span>{{ ability.name }}</span>
@@ -22,7 +19,7 @@ import { DisplayPokemon } from '../interfaces/pokemon.interface';
           <span>{{ ability.isHidden ? 'Yes' : 'No' }}</span>
         </label>
       </div>
-    </ng-template>  
+    </div>
   `,
   styles: [`
     :host {
