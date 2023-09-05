@@ -13,6 +13,7 @@ const childrenRoutes: Route[] = favoritePokemons.map(({ path, pokemonId }) => {
     return {
         path,
         component: FavoritePokemonComponent,
+        title: path,
         data: {
             pokemonId,
         }
@@ -22,6 +23,7 @@ const childrenRoutes: Route[] = favoritePokemons.map(({ path, pokemonId }) => {
 export const favoritePokemonsRoutes: Route[] = [{
     path: '',
     component: FavoritePokemonListComponent,
+    title: 'Favorite Pokemons',
     children: [
         ...childrenRoutes,
         { 
