@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, computed, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, catchError, map, of, switchMap } from 'rxjs';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { Pokemon } from '../../pokemon/interfaces/pokemon.interface';
 import { FavoritePokemon, PokemonSpecies } from '../interfaces/favorite-pokemon.interface';
 
@@ -43,8 +43,8 @@ const favoritePokemonTransformer = (pokemon: Pokemon, species: PokemonSpecies): 
 export class FavoritePokemonService {
   private readonly httpClient = inject(HttpClient);
   
-  private readonly favoritePokemonSub = new BehaviorSubject('');
-  private readonly favoritePokemon$ =  this.favoritePokemonSub
+  private readonly favoritePokemonSignal = signal('');
+  private readonly favoritePokemon$ =  toObservable(this.favoritePokemonSignal)
     .pipe(
       switchMap((idOrName) => this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${idOrName}`)),
       switchMap((pokemon) => 
@@ -77,6 +77,6 @@ export class FavoritePokemonService {
   });
 
   updateFavoritePokemonSub(inputIdOrName:  string) {
-    this.favoritePokemonSub.next(inputIdOrName); 
+    this.favoritePokemonSignal.set(inputIdOrName); 
   }
 }
