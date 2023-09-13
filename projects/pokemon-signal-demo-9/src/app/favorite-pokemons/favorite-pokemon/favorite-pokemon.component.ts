@@ -1,5 +1,6 @@
 import { NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnChanges, booleanAttribute, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, booleanAttribute, computed, effect, inject } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { FavoritePokemonImagesComponent } from '../favorite-pokemon-images/favorite-pokemon-images.component';
 import { FavoritePokemonPersonalComponent } from '../favorite-pokemon-personal/favorite-pokemon-personal.component';
 import { FavoritePokemonService } from '../services/favorite-pokemon.service';
@@ -11,11 +12,11 @@ import { FavoritePokemonService } from '../services/favorite-pokemon.service';
   template: `
     <div>
       <div style="display: flex; justify-content: center;">
-        <app-favorite-pokemon-images *ngIf="isShowMaleImageText()" 
+        <app-favorite-pokemon-images *ngIf="isShowMaleImageText()"
           [description]="'Male version'" [frontImage]="pokemon().frontShiny" [backImage]="pokemon().backShiny"
         >
         </app-favorite-pokemon-images>
-        <app-favorite-pokemon-images *ngIf="isShowFemaleImageText()" 
+        <app-favorite-pokemon-images *ngIf="isShowFemaleImageText()"
           [description]="'Female version'" [frontImage]="pokemon().frontShinyFemale" [backImage]="pokemon().backShinyFemale"
         >
         </app-favorite-pokemon-images>
@@ -46,6 +47,12 @@ export class FavoritePokemonComponent implements OnChanges {
 
   isShowFemaleImageText = computed(() => !!this.pokemon().backShinyFemale || !!this.pokemon().frontShinyFemale);
   isShowMaleImageText = computed(() => !!this.pokemon().backShiny || !!this.pokemon().frontShiny);
+
+  constructor(title: Title) {
+    effect(() => {
+      title.setTitle(this.pokemon().name);
+    });
+  }
 
   ngOnChanges(): void {
     this.pokemonService.updateFavoritePokemonSub(this.pokemonId || this.idOrName);
