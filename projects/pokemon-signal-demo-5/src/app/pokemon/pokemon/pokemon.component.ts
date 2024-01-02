@@ -16,11 +16,11 @@ import { PokemonService } from '../services/pokemon.service';
         <img [src]="pokemon().frontShiny" />
         <img [src]="pokemon().backShiny" />
       </div>
-      <app-pokemon-personal></app-pokemon-personal>
-      <app-pokemon-stats></app-pokemon-stats>
-      <app-pokemon-abilities></app-pokemon-abilities>
+      <app-pokemon-personal />
+      <app-pokemon-stats />
+      <app-pokemon-abilities />
     </div>
-    <app-pokemon-controls></app-pokemon-controls>
+    <app-pokemon-controls />
   `,
   styles: [`
     :host {
