@@ -1,8 +1,8 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs';
 import { retrievePokemonFn } from './retrieve-pokemon';
 import { DisplayPokemon } from './interfaces/pokemon.interface';
 
@@ -35,8 +35,7 @@ const initialValue: DisplayPokemon = {
     </div>
     <div class="container">
       <button class="btn" *ngFor="let delta of [-2, -1, 1, 2]" (click)="updatePokemonId(delta)">{{delta < 0 ? delta : '+' + delta }}</button>
-      <input type="number" [ngModel]="searchIdSub.getValue()" (ngModelChange)="searchIdSub.next($event)"
-        name="searchId" id="searchId" />
+      <input type="number" [ngModel]="searchId()" (ngModelChange)="searchId.set($event)" name="searchId" id="searchId" />
     </div>
     <ng-template #details let-rowData>
       <label *ngFor="let data of rowData">
@@ -84,10 +83,12 @@ export class PokemonComponent {
   readonly min = 1;
   readonly max = 100;
 
-  searchIdSub = new BehaviorSubject(1);
+  searchId = signal(1);
   retrievePokemon = retrievePokemonFn();
-  currentPokemonIdSub = new BehaviorSubject(1);
-  pokemon = toSignal(this.currentPokemonIdSub.pipe(switchMap((id) => this.retrievePokemon(id))), { initialValue });
+  pokemonId = signal(1);
+  
+  pokemon = toSignal(
+    toObservable(this.pokemonId).pipe(switchMap((id) => this.retrievePokemon(id))), { initialValue });
 
   rowData = computed(() => {
     const { id, name, height, weight } = this.pokemon();
@@ -100,17 +101,20 @@ export class PokemonComponent {
   });
 
   updatePokemonId(delta: number) {
-    const newId = this.currentPokemonIdSub.getValue() + delta;
-    this.currentPokemonIdSub.next(Math.min(Math.max(this.min, newId), this.max));
+    this.pokemonId.update((value) => {
+      const potentialId = value + delta;
+      return Math.min(this.max, Math.max(this.min, potentialId));
+    });
   }
 
   constructor() {
-    this.searchIdSub
+    toObservable(this.searchId)
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
         filter((value) => value >= this.min && value <= this.max),
+        map((value) => Math.floor(value)),
         takeUntilDestroyed(),
-      ).subscribe((value) => this.currentPokemonIdSub.next(value));
+      ).subscribe((value) => this.pokemonId.set(value));
   }
 }
