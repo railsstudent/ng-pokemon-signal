@@ -1,20 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, computed, inject, signal } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { inject, Injectable, signal } from '@angular/core';
 import { map, switchMap } from 'rxjs';
-import { DisplayPokemon, Pokemon } from '../interfaces/pokemon.interface';
-import { PokemonDelta } from '../interfaces/pokemon-control.interface';
-
-const initialValue: DisplayPokemon = {
-  id: -1,
-  name: '',
-  height: -1,
-  weight: -1,
-  backShiny: '',
-  frontShiny: '',
-  abilities: [],
-  stats: [],
-};
+import { DisplayPokemon, Pokemon, PokemonDelta } from '../interfaces/pokemon.interface';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 const pokemonTransformer = (pokemon: Pokemon): DisplayPokemon => {
   const abilities = pokemon.abilities.map(({ ability, is_hidden }) => ({
@@ -49,21 +37,10 @@ export class PokemonService {
   private readonly pokemonId = signal(1);
   private readonly httpClient = inject(HttpClient);
 
-  private readonly pokemon$ =  toObservable(this.pokemonId)
-    .pipe(
+  private readonly pokemon$ =  toObservable(this.pokemonId).pipe(
       switchMap((id) => this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${id}`)),
       map((pokemon) => pokemonTransformer(pokemon))
     );
-  pokemon = toSignal(this.pokemon$, { initialValue });
-  personalData = computed(() => {
-    const { id, name, height, weight } = this.pokemon();
-    return [
-      { text: 'Id: ', value: id },
-      { text: 'Name: ', value: name },
-      { text: 'Height: ', value: height },
-      { text: 'Weight: ', value: weight },
-    ];
-  })
 
   updatePokemonId(input: PokemonDelta | number) {
     if (typeof input === 'number') {
