@@ -1,6 +1,6 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { PokemonService } from '../services/pokemon.service';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Statistics } from '../interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-stats',
@@ -9,20 +9,19 @@ import { PokemonService } from '../services/pokemon.service';
   template: `
     <div style="padding: 0.5rem;">
       <p>Stats</p>
-      <ng-container *ngTemplateOutlet="content; context: { $implicit: pokemon().stats }"></ng-container>
+      <ng-container *ngTemplateOutlet="content; context: { $implicit: stats }"></ng-container>
     </div>
     <ng-template #content let-stats>
       <div *ngFor="let stat of stats" class="stats-container">
         <label>
-          <span style="font-weight: bold; color: #aaa">Name: </span>
+          <span class="label">Name: </span>
           <span>{{ stat.name }}</span>
         </label>
-        <label>
-          <span style="font-weight: bold; color: #aaa">Base Stat: </span>
+        <label><span class="label">Base Stat: </span>
           <span>{{ stat.baseStat }}</span>
         </label>
         <label>
-          <span style="font-weight: bold; color: #aaa">Effort: </span>
+          <span class="label">Effort: </span>
           <span>{{ stat.effort }}</span>
         </label>
       </div>
@@ -43,9 +42,15 @@ import { PokemonService } from '../services/pokemon.service';
       flex-grow: 1;
       flex-basis: calc(100% / 3);
     }
+
+    .label {
+      font-weight: bold; 
+      color: #aaa
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonStatsComponent {
-  pokemon = inject(PokemonService).pokemon
+  @Input({ required: true })
+  stats!: Statistics[];
 }
