@@ -1,5 +1,5 @@
 import { NgFor, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs';
