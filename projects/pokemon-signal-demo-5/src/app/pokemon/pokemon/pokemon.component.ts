@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DisplayPokemon } from '../interfaces/pokemon.interface';
 import { PokemonAbilitiesComponent } from '../pokemon-abilities/pokemon-abilities.component';
-import { PokemonControlsComponent } from '../pokemon-controls/pokemon-controls.component';
+import { PokemonControlsComponent } from '../pokemon-controls/pokemon-control.component';
 import { PokemonPersonalComponent } from '../pokemon-personal/pokemon-personal.component';
 import { PokemonStatsComponent } from '../pokemon-stats/pokemon-stats.component';
 import { PokemonService } from '../services/pokemon.service';

@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { map, switchMap } from 'rxjs';
-import { DisplayPokemon, Pokemon, PokemonDelta } from '../interfaces/pokemon.interface';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { map, switchMap } from 'rxjs';
+import { PokemonDelta } from '../interfaces/pokemon-control.interface';
+import { DisplayPokemon, Pokemon } from '../interfaces/pokemon.interface';
 
 const pokemonTransformer = (pokemon: Pokemon): DisplayPokemon => {
   const abilities = pokemon.abilities.map(({ ability, is_hidden }) => ({
@@ -37,7 +38,7 @@ export class PokemonService {
   private readonly pokemonId = signal(1);
   private readonly httpClient = inject(HttpClient);
 
-  private readonly pokemon$ =  toObservable(this.pokemonId).pipe(
+  pokemon$ =  toObservable(this.pokemonId).pipe(
       switchMap((id) => this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${id}`)),
       map((pokemon) => pokemonTransformer(pokemon))
     );
